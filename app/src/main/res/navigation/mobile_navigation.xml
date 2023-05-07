@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -21,4 +21,9 @@
         android:name="com.example.meme.upload"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_upload" />
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="com.example.meme.user"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_user" />
 </navigation>
