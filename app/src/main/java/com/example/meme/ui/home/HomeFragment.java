@@ -63,16 +63,14 @@ public class HomeFragment extends Fragment {
         videos = new ArrayList<>();
 
         naziv = new String[]{
-          getString(R.string.app_name),
           getString(R.string.app_name)
         };
 
         thubnaile = new int[]{
-            R.drawable.baseline_file_upload_24,
-            R.drawable.ic_dashboard_black_24dp
+            R.drawable.baseline_file_upload_24
         };
-        for (int i = 0;i< naziv.length;i++){
-            Videos video = new Videos(naziv[i],thubnaile[i]);
+        for (int i = 0;i< 50;i++){
+            Videos video = new Videos(naziv[0],thubnaile[0]);
             videos.add(video);
         }
 
