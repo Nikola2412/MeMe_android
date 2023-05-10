@@ -1,5 +1,7 @@
 package com.example.meme.ui.home;
 
+import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.meme.MainActivity;
 import com.example.meme.MyAdapter;
 import com.example.meme.R;
 import com.example.meme.Videos;
@@ -28,9 +31,7 @@ import android.widget.Toast;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private ArrayList<Videos> videos;
-    private String[] naziv;
-    private int[] thubnaile;
+    public ArrayList<Videos> videos;
     private RecyclerView rv;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -54,23 +55,26 @@ public class HomeFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setHasFixedSize(true);
         MyAdapter md = new MyAdapter(getContext(),videos);
+
+        md.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                MainActivity mainActivity = new MainActivity();
+                Context context = mainActivity.getApplicationContext();
+                Toast.makeText(context, "Item clicked at position " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         rv.setAdapter(md);
-        md.notifyDataSetChanged();
+        //md.notifyDataSetChanged();
 
     }
 
     private void data() {
         videos = new ArrayList<>();
 
-        naziv = new String[]{
-          getString(R.string.app_name)
-        };
-
-        thubnaile = new int[]{
-            R.drawable.baseline_file_upload_24
-        };
-        for (int i = 0;i< 50;i++){
-            Videos video = new Videos(naziv[0],thubnaile[0]);
+        for (int i = 0;i< 10;i++){
+            Videos video = new Videos(Integer.toString(i),R.drawable.ic_launcher_background);
             videos.add(video);
         }
 
@@ -81,6 +85,7 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
     public void callApi() {
         try {
             // Create a URL object with the API endpoint

@@ -24,8 +24,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         this.videosArrayList = videos;
     }
 
-
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,23 +39,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         Videos video = videosArrayList.get(position);
         holder.thubnaile.setImageResource(video.thubnail);
         holder.naziv.setText(video.naziv);
-
     }
 
     @Override
     public int getItemCount() {
         return videosArrayList.size();
     }
-
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         ShapeableImageView thubnaile;
         TextView naziv;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             thubnaile = itemView.findViewById(R.id.title_image);
             naziv = itemView.findViewById(R.id.naziv);
         }
+    }
+    private OnItemClickListener onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }
