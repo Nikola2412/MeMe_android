@@ -39,6 +39,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         Videos video = videosArrayList.get(position);
         holder.thubnaile.setImageResource(video.thubnail);
         holder.naziv.setText(video.naziv);
+
+        holder.itemView.setTag(position);
     }
 
     @Override
@@ -57,6 +59,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             naziv = itemView.findViewById(R.id.naziv);
         }
     }
+    /*
     private OnItemClickListener onItemClickListener;
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
@@ -64,4 +67,5 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
+    */
 }

@@ -7,14 +7,10 @@
         android:title="@string/title_home" />
     <item
         android:id="@+id/navigation_upload"
-        android:icon="@drawable/baseline_file_upload_24"
-        android:title="@string/title_upload" />
-    <item
-        android:id="@+id/navigation_user"
-        android:icon="@drawable/baseline_file_upload_24"
-        android:title="User"/>
+        android:icon="@drawable/baseline_add_circle_outline_24"
+        android:title="" />
     <item
         android:id="@+id/navigation_memes"
-        android:icon="@drawable/baseline_file_upload_24"
+        android:icon="@drawable/meme"
         android:title="@string/title_memes"/>
 </menu>

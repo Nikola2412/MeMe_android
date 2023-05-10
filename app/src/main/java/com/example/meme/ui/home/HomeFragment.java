@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,23 +54,22 @@ public class HomeFragment extends Fragment {
 
         rv = view.findViewById(R.id.recyclerview);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setHasFixedSize(true);
-        MyAdapter md = new MyAdapter(getContext(),videos);
-
+        MyAdapter md = new MyAdapter(getContext(), videos);
+        /*
         md.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                MainActivity mainActivity = new MainActivity();
-                Context context = mainActivity.getApplicationContext();
-                Toast.makeText(context, "Item clicked at position " + position, Toast.LENGTH_SHORT).show();
+                ((MainActivity)getActivity()).toast(position);
+                //Context context = rv.getContext();
+                //Toast.makeText(context, md.getItemCount(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Item clicked at position " + position, Toast.LENGTH_SHORT).show();
             }
         });
-
+         */
         rv.setAdapter(md);
-        //md.notifyDataSetChanged();
+        md.notifyDataSetChanged();
 
     }
-
     private void data() {
         videos = new ArrayList<>();
 

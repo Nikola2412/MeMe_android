@@ -30,15 +30,14 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home,R.id.navigation_memes,R.id.navigation_upload,R.id.navigation_user)
+                R.id.navigation_home,R.id.navigation_memes,R.id.navigation_upload)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
     public void test(View view){
-        //String nesto = Integer.toString(view);
-        //Toast.makeText(this.getApplicationContext(),nesto, Toast.LENGTH_SHORT).show();
+        toast((Integer) view.getTag());
     }
     public void toast(int k)
     {
