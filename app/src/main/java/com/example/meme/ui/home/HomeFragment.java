@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment {
         videos = new ArrayList<>();
 
         for (int i = 0;i< 10;i++){
-            Videos video = new Videos(Integer.toString(i),R.drawable.ic_launcher_background);
+            Videos video = new Videos(Integer.toString(i),R.drawable.ic_launcher_background,"jdsaasdj");
             videos.add(video);
         }
 

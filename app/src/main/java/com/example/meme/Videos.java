@@ -8,8 +8,11 @@ public class Videos {
     public String naziv;
     public int thubnail;
 
-    public Videos(String naziv, int thubnail) {
+    String link;
+
+    public Videos(String naziv, int thubnail, String link) {
         this.naziv = naziv;
         this.thubnail = thubnail;
+        this.link = link;
     }
 }
