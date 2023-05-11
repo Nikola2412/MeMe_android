@@ -43,5 +43,8 @@ public class MainActivity extends AppCompatActivity {
     {
         Toast.makeText(this.getApplicationContext(), Integer.toString(k), Toast.LENGTH_SHORT).show();
     }
-
+    public void toast(String k)
+    {
+        Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
+    }
 }

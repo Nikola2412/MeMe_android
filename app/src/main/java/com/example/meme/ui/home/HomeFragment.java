@@ -15,6 +15,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
 import com.example.meme.MyAdapter;
 import com.example.meme.R;
@@ -28,6 +34,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 public class HomeFragment extends Fragment {
 
@@ -49,7 +57,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //callApi();
+        callApi();
         data();
 
         rv = view.findViewById(R.id.recyclerview);
@@ -59,25 +67,26 @@ public class HomeFragment extends Fragment {
         md.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ((MainActivity)getActivity()).toast(position);
+                ((MainActivity)getActivity()).toast(98);
                 //Context context = rv.getContext();
                 //Toast.makeText(context, md.getItemCount(), Toast.LENGTH_SHORT).show();
                 //Toast.makeText(context, "Item clicked at position " + position, Toast.LENGTH_SHORT).show();
             }
         });
-         */
+        */
         rv.setAdapter(md);
         md.notifyDataSetChanged();
 
     }
+
     private void data() {
         videos = new ArrayList<>();
 
-        for (int i = 0;i< 10;i++){
-            Videos video = new Videos(Integer.toString(i),R.drawable.ic_launcher_background,"jdsaasdj");
+        for (int i = 0; i < 10; i++) {
+            Videos video = new Videos(Integer.toString(i), R.drawable.ic_launcher_background, "jdsaasdj");
             videos.add(video);
         }
-
+        //((MainActivity)getActivity()).toast(69);
     }
 
     @Override
@@ -87,48 +96,21 @@ public class HomeFragment extends Fragment {
     }
 
     public void callApi() {
-        try {
-            // Create a URL object with the API endpoint
-            URL url = new URL("http://localhost:3001/videos");
-
-
-            // Open a connection to the URL
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // Set the request method
-            connection.setRequestMethod("GET");
-
-
-            // Get the response code
-            int responseCode = 200;
-
-            // Read the response
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            String line;
-            StringBuilder response = new StringBuilder();
-
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-                Toast.makeText(this.getContext(),line, Toast.LENGTH_SHORT).show();
+        String url = "https://10.0.2.2/videos";
+        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ((MainActivity)getActivity()).toast(response.toString());
             }
-            reader.close();
-
-            // Handle the response
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Process the response data
-                System.out.println("Response: " + response.toString());
-                Toast.makeText(this.getContext(),response.toString(), Toast.LENGTH_SHORT).show();
-            } else {
-                // Handle error cases
-                System.out.println("Error: " + responseCode);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MainActivity) getActivity()).toast(error.toString());
             }
+        });
 
-            // Disconnect the connection
-            connection.disconnect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
+        requestQueue.add(request);
     }
 }
