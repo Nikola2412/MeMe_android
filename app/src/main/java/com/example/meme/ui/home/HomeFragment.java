@@ -3,6 +3,7 @@ package com.example.meme.ui.home;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +20,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
 import com.example.meme.MyAdapter;
@@ -35,6 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class HomeFragment extends Fragment {
@@ -57,47 +61,69 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        callApi();
+        videos = new ArrayList<>();
+        callApi(view);
         data();
 
-        rv = view.findViewById(R.id.recyclerview);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        MyAdapter md = new MyAdapter(getContext(), videos);
-        /*
-        md.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                ((MainActivity)getActivity()).toast(98);
-                //Context context = rv.getContext();
-                //Toast.makeText(context, md.getItemCount(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context, "Item clicked at position " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
-        rv.setAdapter(md);
-        md.notifyDataSetChanged();
+
 
     }
 
-    private void data() {
-        videos = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            Videos video = new Videos(Integer.toString(i), R.drawable.ic_launcher_background, "jdsaasdj");
-            videos.add(video);
-        }
-        //((MainActivity)getActivity()).toast(69);
-    }
+    
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+    private void data() {
+        
 
-    public void callApi() {
-        String url = "https://10.0.2.2/videos";
+        /*
+        for (int i = 0; i < 10; i++) {
+            Videos video = new Videos(Integer.toString(i), R.drawable.ic_launcher_background, "jdsaasdj");
+            videos.add(video);
+        }
+
+         */
+        //((MainActivity)getActivity()).toast(69);
+      
+
+    }
+    public void callApi(View view) {
+        String url = "http://192.168.1.3:3001/videos";
         String url2 = "https://jsonplaceholder.typicode.com/todos/1";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONObject json = new JSONObject();
+                //((MainActivity) getActivity()).toast(response.toString());
+
+                for(int i=0; i<response.length(); i++){
+                    JSONObject json_data = response.optJSONObject(i);
+                    //((MainActivity) getActivity()).toast(json_data.optString("ime"));
+                    int id = json_data.optInt("id");
+                    String ime = json_data.optString("ime");
+                    //String name = json_data.optString("name");
+                    Videos video = new Videos(ime, "http://192.168.1.3:3001/thubnails/" + id + ".jpg", "jdsaasdj");
+                    videos.add(video);
+                }
+                rv = view.findViewById(R.id.recyclerview);
+                rv.setLayoutManager(new LinearLayoutManager(getContext()));
+                MyAdapter md = new MyAdapter(getContext(), videos);
+                rv.setAdapter(md);
+                md.notifyDataSetChanged();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ((MainActivity) getActivity()).toast(error.toString());
+            }
+        });
+
+        /*
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -109,6 +135,8 @@ public class HomeFragment extends Fragment {
                 ((MainActivity) getActivity()).toast(error.toString());
             }
         });
+
+        */
 
         RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
         requestQueue.add(request);

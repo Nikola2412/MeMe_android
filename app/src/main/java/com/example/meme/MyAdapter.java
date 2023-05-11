@@ -5,18 +5,20 @@ import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
-    Context context;
+    static Context context;
     ArrayList<Videos> videosArrayList;
 
     public MyAdapter(Context context,ArrayList<Videos> videos){
@@ -37,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Videos video = videosArrayList.get(position);
-        holder.thubnaile.setImageResource(video.thubnail);
+        holder.setThubnaile(video.thubnail);
         holder.naziv.setText(video.naziv);
 
         holder.itemView.setTag(position);
@@ -45,27 +47,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     @Override
     public int getItemCount() {
+
         return videosArrayList.size();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        ShapeableImageView thubnaile;
+        ImageView thubnaile;
         TextView naziv;
-
+        View view;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            thubnaile = itemView.findViewById(R.id.title_image);
+            view = itemView;
             naziv = itemView.findViewById(R.id.naziv);
         }
+        public void setThubnaile(String url) {
+            thubnaile = view.findViewById(R.id.title_image);
+            Glide.with(context).load(url).into(thubnaile);
+        }
     }
-    /*
-    private OnItemClickListener onItemClickListener;
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
-    public interface OnItemClickListener {
-        public void onItemClick(int position);
-    }
-    */
 }

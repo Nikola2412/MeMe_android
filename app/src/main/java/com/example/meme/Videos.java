@@ -6,11 +6,11 @@ import android.widget.Toast;
 public class Videos {
 
     public String naziv;
-    public int thubnail;
+    public String thubnail;
 
     String link;
 
-    public Videos(String naziv, int thubnail, String link) {
+    public Videos(String naziv, String thubnail, String link) {
         this.naziv = naziv;
         this.thubnail = thubnail;
         this.link = link;
