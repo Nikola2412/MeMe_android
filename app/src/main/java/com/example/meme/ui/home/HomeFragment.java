@@ -41,8 +41,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecycleViewInterface{
 
+    RecycleViewInterface recycleViewInterface;
     private FragmentHomeBinding binding;
     public ArrayList<Videos> videos;
     private RecyclerView rv;
@@ -62,33 +63,14 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         videos = new ArrayList<>();
+        recycleViewInterface = this;
         callApi(view);
-        data();
-
-
-
     }
-
-    
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-    private void data() {
-        
-
-        /*
-        for (int i = 0; i < 10; i++) {
-            Videos video = new Videos(Integer.toString(i), R.drawable.ic_launcher_background, "jdsaasdj");
-            videos.add(video);
-        }
-
-         */
-        //((MainActivity)getActivity()).toast(69);
-      
-
     }
     public void callApi(View view) {
         String url = "http://192.168.1.3:3001/videos";
@@ -106,12 +88,12 @@ public class HomeFragment extends Fragment {
                     int id = json_data.optInt("id");
                     String ime = json_data.optString("ime");
                     //String name = json_data.optString("name");
-                    Videos video = new Videos(ime, "http://192.168.1.3:3001/thubnails/" + id + ".jpg", "jdsaasdj");
+                    Videos video = new Videos(ime, "http://192.168.1.3:3001/thubnails/" + id + ".jpg", "http://192.168.1.3:3001/video?id=" + id);
                     videos.add(video);
                 }
                 rv = view.findViewById(R.id.recyclerview);
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
-                MyAdapter md = new MyAdapter(getContext(), videos);
+                MyAdapter md = new MyAdapter(getContext(), videos,recycleViewInterface);
                 rv.setAdapter(md);
                 md.notifyDataSetChanged();
 
@@ -123,22 +105,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        /*
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                ((MainActivity)getActivity()).toast(response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ((MainActivity) getActivity()).toast(error.toString());
-            }
-        });
-
-        */
-
         RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
         requestQueue.add(request);
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        ((MainActivity) getActivity()).toast(position);
     }
 }

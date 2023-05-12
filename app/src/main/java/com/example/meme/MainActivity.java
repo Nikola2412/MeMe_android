@@ -16,13 +16,13 @@ import com.example.meme.databinding.ActivityMainBinding;
 import kotlin.collections.IntIterator;
 
 public class MainActivity extends AppCompatActivity {
-
     private ActivityMainBinding binding;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
     public void test(View view){
-        toast((Integer) view.getTag());
+        int pos = (Integer) view.getTag();
     }
     public void toast(int k)
     {
