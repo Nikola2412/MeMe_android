@@ -66,18 +66,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         TextView ime;
         View view;
 
+        public void setThubnaile(String url) {
+            thubnaile = view.findViewById(R.id.title_image);
+            Glide.with(context).load(url).into(thubnaile);
+        }
+
         public MyViewHolder(@NonNull View itemView,RecycleViewInterface recycleViewInterface) {
             super(itemView);
             view = itemView;
             naziv = itemView.findViewById(R.id.naziv);
             ime = itemView.findViewById(R.id.kanal_naziv);
+
+            icon = view.findViewById(R.id.kanal_icon);
+            Glide.with(context).load("http://192.168.1.3:3001/images/profile.png").into(icon);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(recycleViewInterface !=null){
                         int pos = getAdapterPosition();
-                        int test = (int) getItemId();
-
                         if(pos != RecyclerView.NO_POSITION)
                         {
                             recycleViewInterface.onItemClick(pos);
@@ -85,12 +92,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                     }
                 }
             });
+            icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recycleViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recycleViewInterface.onLink(pos);
+                        }
+                    }
+                }
+            });
+            ime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recycleViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recycleViewInterface.onLink(pos);
+                        }
+                    }
+                }
+            });
         }
-        public void setThubnaile(String url) {
-            thubnaile = view.findViewById(R.id.title_image);
-            Glide.with(context).load(url).into(thubnaile);
-            icon = view.findViewById(R.id.kanal_icon);
-            Glide.with(context).load("http://192.168.1.3:3001/images/profile.png").into(icon);
-        }
+
     }
 }

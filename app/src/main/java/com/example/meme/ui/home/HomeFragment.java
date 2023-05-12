@@ -117,4 +117,11 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     public void onItemClick(int position) {
         ((MainActivity) getActivity()).toast(position);
     }
+
+    @Override
+    public void onLink(int position) {
+        ((MainActivity) getActivity()).toast(videos.get(position).getKanal());
+    }
+
+
 }
