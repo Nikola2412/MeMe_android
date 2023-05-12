@@ -73,10 +73,11 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
         binding = null;
     }
     public void callApi(View view) {
-        String url = "http://192.168.1.3:3001/videos";
+        String url = "videos";
+        String ip = "http://192.168.1.133:3001/";
         String url2 = "https://jsonplaceholder.typicode.com/todos/1";
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 JSONObject json = new JSONObject();
@@ -88,7 +89,8 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                     int id = json_data.optInt("id");
                     String ime = json_data.optString("ime");
                     //String name = json_data.optString("name");
-                    Videos video = new Videos(ime, "http://192.168.1.3:3001/thubnails/" + id + ".jpg", "http://192.168.1.3:3001/video?id=" + id);
+                    Videos video = new Videos(ime,
+                            ip+"thubnails/" + id + ".jpg", "http://192.168.1.3:3001/video?id=" + id);
                     videos.add(video);
                 }
                 rv = view.findViewById(R.id.recyclerview);
