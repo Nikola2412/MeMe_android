@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.example.meme.ui.home.RecycleViewInterface;
 
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         Videos video = videosArrayList.get(position);
         holder.setThubnaile(video.thubnail);
         holder.naziv.setText(video.naziv);
-
+        holder.ime.setText(video.kanal);
         //holder.itemView.setTag(position);
     }
 
@@ -58,18 +59,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView thubnaile;
+
+        ImageView icon;
         TextView naziv;
+
+        TextView ime;
         View view;
 
         public MyViewHolder(@NonNull View itemView,RecycleViewInterface recycleViewInterface) {
             super(itemView);
             view = itemView;
             naziv = itemView.findViewById(R.id.naziv);
+            ime = itemView.findViewById(R.id.kanal_naziv);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(recycleViewInterface !=null){
                         int pos = getAdapterPosition();
+                        int test = (int) getItemId();
 
                         if(pos != RecyclerView.NO_POSITION)
                         {
@@ -82,6 +89,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         public void setThubnaile(String url) {
             thubnaile = view.findViewById(R.id.title_image);
             Glide.with(context).load(url).into(thubnaile);
+            icon = view.findViewById(R.id.kanal_icon);
+            Glide.with(context).load("http://192.168.1.3:3001/images/profile.png").into(icon);
         }
     }
 }

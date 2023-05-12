@@ -10,10 +10,13 @@ public class Videos {
 
     public String link;
 
-    public Videos(String naziv, String thubnail, String link) {
+    public String kanal;
+
+    public Videos(String naziv, String thubnail, String link, String kanal) {
         this.naziv = naziv;
         this.thubnail = thubnail;
         this.link = link;
+        this.kanal = kanal;
     }
 
     public String getNaziv() {
@@ -26,5 +29,9 @@ public class Videos {
 
     public String getLink() {
         return link;
+    }
+
+    public String getKanal() {
+        return kanal;
     }
 }

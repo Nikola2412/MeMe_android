@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
     public void test(View view){
-        int pos = (Integer) view.getTag();
+
     }
     public void toast(int k)
     {
