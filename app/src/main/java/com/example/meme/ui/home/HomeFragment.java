@@ -48,10 +48,8 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     public ArrayList<Videos> videos;
     private RecyclerView rv;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -74,7 +72,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     }
     public void callApi(View view) {
         String url = "videos";
-        String ip = "http://192.168.1.3:3001/";
+        String ip = "http://192.168.1.7:3001/";
         String url2 = "https://jsonplaceholder.typicode.com/todos/1";
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
@@ -94,7 +92,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                             ip+"thubnails/" + id + ".jpg", "http://192.168.1.3:3001/video?id=" + id,name);
                     videos.add(video);
                 }
-                rv = view.findViewById(R.id.recyclerview);
+                rv = view.findViewById(R.id.videos);
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 MyAdapter md = new MyAdapter(getContext(), videos,recycleViewInterface);
                 rv.setAdapter(md);

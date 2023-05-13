@@ -8,9 +8,10 @@
     <item
         android:id="@+id/navigation_upload"
         android:icon="@drawable/baseline_add_circle_outline_24"
-        android:title="" />
+        android:title="Upload" />
     <item
-        android:id="@+id/navigation_memes"
+        android:id="@+id/navigation_meme"
         android:icon="@drawable/meme"
         android:title="@string/title_memes"/>
+
 </menu>
