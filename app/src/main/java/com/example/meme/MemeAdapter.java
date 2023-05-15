@@ -65,7 +65,8 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder
                         int pos = getAdapterPosition();
                         if(pos != RecyclerView.NO_POSITION)
                         {
-                            recycleViewInterface.onItemClick(pos);
+                            //recycleViewInterface.onItemClick(pos);
+                            recycleViewInterface.openImageFullscreen(meme,pos);
                         }
                     }
                 }

@@ -1,9 +1,14 @@
 package com.example.meme;
 
+import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -23,6 +28,7 @@ import com.example.meme.MemeInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -65,19 +71,17 @@ public class MemesFragment extends Fragment implements MemeInterface{
 
     public void callApi(View view) {
         String url = "memes";
-        String ip = "http://192.168.1.7:3001/";
+        String ip = getString(R.string.ip);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                JSONObject json = new JSONObject();
                 for(int i=0; i<response.length(); i++){
                     JSONObject json_data = response.optJSONObject(i);
                     String id = json_data.optString("id");
-
                     int id_kanala = json_data.optInt("id_kanala");
-                    //((MainActivity)getActivity()).toast(ip + "see?meme=" + id);
-                    Meme meme = new Meme(ip + "id_memea=" + id,id_kanala);
+                    String naziv_kanala = json_data.optString("name");
+                    Meme meme = new Meme(ip + "id_memea=" + id,id_kanala,naziv_kanala);
                     memes.add(meme);
                 }
                 rv = view.findViewById(R.id.memes);
@@ -96,13 +100,39 @@ public class MemesFragment extends Fragment implements MemeInterface{
 
         RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
         requestQueue.add(request);
-
     }
 
     @Override
     public void onItemClick(int position) {
-        ((MainActivity)getActivity()).toast(position);
+        //((MainActivity)getActivity()).toast(position);
+    }
 
+    @Override
+    public void openImageFullscreen(ImageView imageView, int pos) {
+        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.image_dialog);
+
+        ImageView fullscreenImageView = dialog.findViewById(R.id.view_meme);
+
+        fullscreenImageView.setImageDrawable(imageView.getDrawable());
+
+        TextView tv = dialog.findViewById(R.id.naziv_kanala);
+        tv.setText(memes.get(pos).naziv_kanala);
+
+
+        fullscreenImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        dialog.show();
     }
 
 }
