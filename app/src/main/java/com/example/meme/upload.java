@@ -17,7 +17,6 @@ public class upload extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainActivity)getActivity()).Portrait();
     }
 
     @Override
