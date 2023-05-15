@@ -1,5 +1,6 @@
 package com.example.meme;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
@@ -33,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        All();
+    }
+    public void Portrait() {
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+    public void All(){
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
     public void test(View view){
 

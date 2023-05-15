@@ -1,6 +1,8 @@
 package com.example.meme;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,6 +45,7 @@ public class MemesFragment extends Fragment implements MemeInterface{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MainActivity)getActivity()).Portrait();
     }
 
     @Override
@@ -134,5 +137,4 @@ public class MemesFragment extends Fragment implements MemeInterface{
 
         dialog.show();
     }
-
 }
