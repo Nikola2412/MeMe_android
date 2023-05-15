@@ -45,7 +45,6 @@ public class MemesFragment extends Fragment implements MemeInterface{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainActivity)getActivity()).Portrait();
     }
 
     @Override

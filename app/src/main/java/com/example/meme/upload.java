@@ -26,7 +26,6 @@ public class upload extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentUploadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         return root;
     }
 }
