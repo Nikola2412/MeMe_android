@@ -1,24 +1,34 @@
 package com.example.meme;
 
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
+
 import com.example.meme.databinding.ActivityMainBinding;
 
-import kotlin.collections.IntIterator;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    public boolean logged = false;
+    public MenuItem login,logout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +49,33 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+    }
+    public void setLogged(){
+        if(!logged){
+            logout.setVisible(true);
+            logout.setVisible(false);
+        }
+        else {
+            login.setVisible(false);
+            logout.setVisible(true);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test_menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
+        login = menu.findItem(R.id.login);
+        logout = menu.findItem(R.id.logout);
+        setLogged();
         return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        toast(item.getTitle().toString());
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void Portrait() {
@@ -63,5 +94,24 @@ public class MainActivity extends AppCompatActivity {
     public void toast(String k)
     {
         Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
+    }
+    public void test2(String videoUrl){
+
+        setContentView(R.layout.dialog_video);
+        VideoView videoView = findViewById(R.id.videoView);
+        Uri uri = Uri.parse(videoUrl);
+
+        videoView.setVideoURI(uri);
+
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoView);
+
+        mediaController.setMediaPlayer(videoView);
+
+        // sets the media controller to the videoView
+        videoView.setMediaController(mediaController);
+
+        // starts the video
+        videoView.start();
     }
 }

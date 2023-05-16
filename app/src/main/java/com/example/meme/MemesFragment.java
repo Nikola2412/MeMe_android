@@ -69,6 +69,7 @@ public class MemesFragment extends Fragment implements MemeInterface{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding=null;
     }
 
     public void callApi(View view) {
@@ -133,7 +134,6 @@ public class MemesFragment extends Fragment implements MemeInterface{
             public void onClick(View v) {
             }
         });
-
         dialog.show();
     }
 }

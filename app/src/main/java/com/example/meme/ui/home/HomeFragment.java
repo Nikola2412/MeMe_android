@@ -1,7 +1,10 @@
 package com.example.meme.ui.home;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +39,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,7 +100,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                     String name = json_data.optString("name");
                     //String name = json_data.optString("name");
                     Videos video = new Videos(ime,
-                            ip+"thubnails/" + id + ".jpg", ip + "video?id=" + id,name);
+                            ip+"thubnails/" + id + ".jpg", ip + "id_videa="+id,name);
                     videos.add(video);
                 }
                 rv = view.findViewById(R.id.videos);
@@ -116,7 +124,32 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onItemClick(int position) {
-        ((MainActivity) getActivity()).toast(position);
+        /*
+        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.dialog_video);
+        dialog.show();
+
+        // Initialize and play the video within the dialog
+        VideoView videoView = dialog.findViewById(R.id.videoView);
+        String URL = videos.get(0).link;
+        videoView.setVideoURI(Uri.parse(URL));
+
+        MediaController mediaController = new MediaController(getContext());
+
+        // sets the anchor view
+        // anchor view for the videoView
+        mediaController.setAnchorView(videoView);
+
+        // sets the media player to the videoView
+        mediaController.setMediaPlayer(videoView);
+
+        // sets the media controller to the videoView
+        videoView.setMediaController(mediaController);
+
+        // starts the video
+        videoView.start();
+
+         */
     }
 
     @Override

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search_button"
+        android:title="Search"
+        android:icon="@drawable/lupa"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/user"
+        android:icon="@drawable/profile"
+        app:showAsAction="ifRoom"
+        android:title="User"
+        />
+    <item
+        android:id="@+id/login"
+        android:icon="@drawable/log_in"
+        android:title="Login"
+        />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/logout"
+        android:title="Logout" />
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/setting"
+        android:title="Setting"
+        />
+</menu>
