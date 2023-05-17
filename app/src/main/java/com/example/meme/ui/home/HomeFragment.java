@@ -124,6 +124,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onItemClick(int position) {
+        ((MainActivity) getActivity()).test2(videos.get(position).link);
         /*
         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.dialog_video);

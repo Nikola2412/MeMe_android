@@ -1,10 +1,13 @@
 package com.example.meme;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
     }
+    @SuppressLint("ClickableViewAccessibility")
     public void test2(String videoUrl){
 
         setContentView(R.layout.dialog_video);
@@ -113,5 +117,22 @@ public class MainActivity extends AppCompatActivity {
 
         // starts the video
         videoView.start();
+
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                setContentView(binding.getRoot());
+                return false;
+            }
+        });
+
+
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                setContentView(binding.getRoot());
+                return false;
+            }
+        });
     }
 }
