@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     private FragmentHomeBinding binding;
     public ArrayList<Videos> videos;
     private RecyclerView rv;
+
+    View view;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,9 +76,12 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //((MainActivity)getActivity()).getSupportActionBar().show();
+        //((MainActivity)getActivity()).setTheme(R.style.Theme_MeMe);
         videos = new ArrayList<>();
         recycleViewInterface = this;
-        callApi(view);
+        this.view = view;
+        callApi();
     }
 
     @Override
@@ -82,7 +89,9 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
         super.onDestroyView();
         binding = null;
     }
-    public void callApi(View view) {
+
+
+    public void callApi() {
         String url = "videos";
         String ip = getString(R.string.ip);
         String url2 = "https://jsonplaceholder.typicode.com/todos/1";
@@ -124,7 +133,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onItemClick(int position) {
-        ((MainActivity)getActivity()).toast(videos.get(position).link);
+        //((MainActivity)getActivity()).toast(videos.get(position).link);
         ((MainActivity) getActivity()).test2(videos.get(position).link);
         /*
         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);

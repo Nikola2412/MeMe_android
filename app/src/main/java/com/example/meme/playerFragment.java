@@ -1,15 +1,27 @@
 package com.example.meme;
 
+import android.annotation.SuppressLint;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,13 +36,16 @@ import java.util.ArrayList;
 
 public class playerFragment extends Fragment implements playerInterface{
 
-    playerInterface playerInterface;
-    public ArrayList<Videos> videos;
-    private RecyclerView rv;
+    //playerInterface playerInterface;
+    //public ArrayList<Videos> videos;
+    //private RecyclerView rv;
     private FragmentPlayerBinding binding;
+    View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -40,6 +55,90 @@ public class playerFragment extends Fragment implements playerInterface{
         binding = FragmentPlayerBinding.inflate(inflater,container,false);
         View root= binding.getRoot();
         return  root;
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //((MainActivity)getActivity()).getSupportActionBar().hide();
+        //((MainActivity)getActivity()).setTheme(R.style.Theme_AppCompat_Dark_NoActionBar_FullScreen);
+
+        //videos = new ArrayList<>();
+        //playerInterface = this;
+        this.view = view;
+        setVideo();
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    public void setVideo(){
+        String videoUrl = ((MainActivity)getActivity()).URL();
+        VideoView videoView = view.findViewById(R.id.videoView);
+        //Button back = view.findViewById(R.id.back_button);
+        Uri uri = Uri.parse(videoUrl);
+
+        videoView.setVideoURI(uri);
+
+        MediaController mediaController = new MediaController(getContext());
+        mediaController.setAnchorView(videoView);
+
+        mediaController.setMediaPlayer(videoView);
+
+        // sets the media controller to the videoView
+        videoView.setMediaController(mediaController);
+
+        videoView.requestFocus();
+
+        videoView.start();
+        };
+    private void hideSystemUI() {
+        if (getActivity() != null) {
+            View decorView = getActivity().getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
+    // Metoda za prikaz sistemskih traka
+    private void showSystemUI() {
+        if (getActivity() != null) {
+            View decorView = getActivity().getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            if (getActivity().getActionBar() != null) {
+                getActivity().getActionBar().show();
+            }
+        }
+    }
+    private void toggleFullScreen() {
+        if (getActivity() != null) {
+            Window window = getActivity().getWindow();
+            View decorView = window.getDecorView();
+            if (isFullScreen()) {
+                // Ako je već u punom zaslonu, prebacite se na običan prikaz
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                if (getActivity().getActionBar() != null) {
+                    getActivity().getActionBar().show();
+                }
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            } else {
+                // Ako je u običnom prikazu, prebacite se na puni zaslon
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                if (getActivity().getActionBar() != null) {
+                    getActivity().getActionBar().hide();
+                }
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            }
+        }
+    }
+    private boolean isFullScreen() {
+        if (getActivity() != null) {
+            int flags = getActivity().getWindow().getAttributes().flags;
+            return (flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+        }
+        return false;
     }
 
     public  void callApi(View view){
@@ -60,14 +159,6 @@ public class playerFragment extends Fragment implements playerInterface{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        videos = new ArrayList<>();
-        playerInterface = this;
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
@@ -75,6 +166,9 @@ public class playerFragment extends Fragment implements playerInterface{
 
     @Override
     public void onItemClick(int position) {
+
+    }
+    public void test2(String videoUrl){
 
     }
 }

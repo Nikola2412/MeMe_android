@@ -1,6 +1,7 @@
 package com.example.meme;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.meme.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationView;
 
 import java.net.URL;
 
@@ -32,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public boolean logged = false;
     public MenuItem login,logout;
+    NavController navController;
 
+    String currentURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        //navView.setVisibility(View.GONE);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home,R.id.navigation_upload,R.id.navigation_meme)
+                R.id.navigation_home,R.id.navigation_upload,R.id.navigation_meme,R.id.videos)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        Portrait();
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Portrait() {
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
     public void All(){
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
@@ -99,39 +104,12 @@ public class MainActivity extends AppCompatActivity {
     {
         Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
     }
-    @SuppressLint("ClickableViewAccessibility")
     public void test2(String videoUrl){
-
-        setContentView(R.layout.dialog_video);
-        VideoView videoView = findViewById(R.id.videoView);
-        Button back = findViewById(R.id.back_button);
-        Uri uri = Uri.parse(videoUrl);
-
-        videoView.setVideoURI(uri);
-
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(videoView);
-
-        mediaController.setMediaPlayer(videoView);
-
-        // sets the media controller to the videoView
-        videoView.setMediaController(mediaController);
-
-        // starts the video
-        videoView.start();
-
-        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                setContentView(binding.getRoot());
-                return false;
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setContentView(binding.getRoot());
-            }
-        });
+        navController.navigate(R.id.videos);
+        currentURL = videoUrl;
     }
+    public String URL(){
+        return currentURL;
+    }
+
 }

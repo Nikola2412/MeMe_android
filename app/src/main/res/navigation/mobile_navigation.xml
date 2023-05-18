@@ -22,4 +22,10 @@
         android:name="com.example.meme.MemesFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_memes" />
+
+    <fragment
+        android:id="@+id/videos"
+        android:name="com.example.meme.playerFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_player"/>
 </navigation>
