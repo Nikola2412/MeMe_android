@@ -22,6 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private final RecycleViewInterface recycleViewInterface;
     static Context context;
+    String ip;
     ArrayList<Videos> videosArrayList;
 
     public MyAdapter(Context context, ArrayList<Videos> videos, RecycleViewInterface recycleViewInterface){
@@ -65,6 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         TextView ime;
         View view;
 
+
         public void setThubnaile(String url) {
             thubnaile = view.findViewById(R.id.title_image);
             Glide.with(context).load(url).into(thubnaile);
@@ -77,7 +79,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             ime = itemView.findViewById(R.id.kanal_naziv);
 
             icon = view.findViewById(R.id.kanal_icon);
-            Glide.with(context).load("http://192.168.1.3:3001/images/profile.png").into(icon);
+
+            //Glide.with(context).load("http://192.168.1.133:3001/images/profile.png").into(icon);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -41,9 +41,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:adjustViewBounds="true"
         app:layout_constraintStart_toEndOf="@+id/title_image"
         app:layout_constraintTop_toBottomOf="@+id/naziv"
+        android:src="@drawable/profile"
         />
 
     <TextView

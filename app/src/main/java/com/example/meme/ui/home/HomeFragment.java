@@ -100,7 +100,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                     String name = json_data.optString("name");
                     //String name = json_data.optString("name");
                     Videos video = new Videos(ime,
-                            ip+"thubnails/" + id + ".jpg", ip + "id_videa="+id,name);
+                            ip+"thubnails/" + id + ".jpg", ip + "android_id_videa="+id,name);
                     videos.add(video);
                 }
                 rv = view.findViewById(R.id.videos);
@@ -124,6 +124,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onItemClick(int position) {
+        ((MainActivity)getActivity()).toast(videos.get(position).link);
         ((MainActivity) getActivity()).test2(videos.get(position).link);
         /*
         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);

@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.dialog_video);
         VideoView videoView = findViewById(R.id.videoView);
+        Button back = findViewById(R.id.back_button);
         Uri uri = Uri.parse(videoUrl);
 
         videoView.setVideoURI(uri);
@@ -125,13 +127,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-        videoView.setOnTouchListener(new View.OnTouchListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 setContentView(binding.getRoot());
-                return false;
             }
         });
     }
