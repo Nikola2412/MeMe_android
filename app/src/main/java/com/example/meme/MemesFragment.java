@@ -63,6 +63,7 @@ public class MemesFragment extends Fragment implements MemeInterface{
         super.onViewCreated(view, savedInstanceState);
         memes = new ArrayList<>();
         recycleViewInterface = this;
+        ((MainActivity)getActivity()).Show();
         callApi(view);
     }
 

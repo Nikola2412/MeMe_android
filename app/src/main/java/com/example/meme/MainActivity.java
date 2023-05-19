@@ -1,35 +1,23 @@
 package com.example.meme;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.example.meme.databinding.ActivityMainBinding;
-import com.google.android.material.navigation.NavigationView;
-
-import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -39,13 +27,15 @@ public class MainActivity extends AppCompatActivity {
 
     String currentURL;
 
+    BottomNavigationView navView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         //navView.setVisibility(View.GONE);
@@ -58,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-
     }
     public void setLogged(){
         if(!logged){
@@ -81,9 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         toast(item.getTitle().toString());
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,9 +91,16 @@ public class MainActivity extends AppCompatActivity {
     {
         Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
     }
+    public void Hide(){
+        getSupportActionBar().hide();
+    }
+    public void Show(){
+        getSupportActionBar().show();
+    }
     public void test2(String videoUrl){
         navController.navigate(R.id.videos);
         currentURL = videoUrl;
+        Hide();
     }
     public String URL(){
         return currentURL;

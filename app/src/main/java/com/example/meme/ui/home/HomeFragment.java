@@ -66,22 +66,19 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //((MainActivity)getActivity()).getSupportActionBar().show();
-        //((MainActivity)getActivity()).setTheme(R.style.Theme_MeMe);
         videos = new ArrayList<>();
         recycleViewInterface = this;
         this.view = view;
         callApi();
+        ((MainActivity)getActivity()).Show();
     }
 
     @Override
@@ -95,6 +92,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
         String url = "videos";
         String ip = getString(R.string.ip);
         String url2 = "https://jsonplaceholder.typicode.com/todos/1";
+
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -128,39 +126,12 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
         RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
         requestQueue.add(request);
-
     }
 
     @Override
     public void onItemClick(int position) {
         //((MainActivity)getActivity()).toast(videos.get(position).link);
         ((MainActivity) getActivity()).test2(videos.get(position).link);
-        /*
-        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        dialog.setContentView(R.layout.dialog_video);
-        dialog.show();
-
-        // Initialize and play the video within the dialog
-        VideoView videoView = dialog.findViewById(R.id.videoView);
-        String URL = videos.get(0).link;
-        videoView.setVideoURI(Uri.parse(URL));
-
-        MediaController mediaController = new MediaController(getContext());
-
-        // sets the anchor view
-        // anchor view for the videoView
-        mediaController.setAnchorView(videoView);
-
-        // sets the media player to the videoView
-        mediaController.setMediaPlayer(videoView);
-
-        // sets the media controller to the videoView
-        videoView.setMediaController(mediaController);
-
-        // starts the video
-        videoView.start();
-
-         */
     }
 
     @Override
