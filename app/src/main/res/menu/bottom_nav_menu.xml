@@ -7,11 +7,11 @@
         android:title="@string/title_home" />
     <item
         android:id="@+id/navigation_upload"
-        android:icon="@drawable/baseline_add_circle_outline_24"
-        android:title="Upload" />
+        android:title="@string/title_upload"
+        android:icon="@drawable/baseline_add_circle_outline_24">
+    </item>
     <item
         android:id="@+id/navigation_meme"
         android:icon="@drawable/meme"
         android:title="@string/title_memes"/>
-
 </menu>

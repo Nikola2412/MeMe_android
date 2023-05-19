@@ -1,7 +1,11 @@
 package com.example.meme;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,11 +14,17 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.meme.databinding.ActivityMainBinding;
@@ -40,15 +50,72 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         //navView.setVisibility(View.GONE);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home,R.id.navigation_upload,R.id.navigation_meme,R.id.videos)
+                R.id.navigation_home,R.id.navigation_upload,R.id.navigation_meme)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+        findViewById(R.id.navigation_upload).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(MainActivity.this);
+                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.upload_dialog);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+                Button meme = dialog.findViewById(R.id.upload_meme);
+                Button video = dialog.findViewById(R.id.upload_video);
+
+                meme.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toast("Meme");
+                        dialog.dismiss();
+                    }
+                });
+                video.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toast("Video");
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
     }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Do you want to exit?");
+        builder.setTitle("Exit");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void setLogged(){
         if(!logged){
             logout.setVisible(true);
@@ -70,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        toast(item.getTitle().toString());
+        String name = item.getTitle().toString();
         return super.onOptionsItemSelected(item);
     }
 
@@ -93,9 +160,14 @@ public class MainActivity extends AppCompatActivity {
     }
     public void Hide(){
         getSupportActionBar().hide();
+        navView.setVisibility(View.INVISIBLE);
     }
     public void Show(){
         getSupportActionBar().show();
+        if (navView != null) {
+            navView.setVisibility(View.VISIBLE);
+        }
+
     }
     public void test2(String videoUrl){
         navController.navigate(R.id.videos);
