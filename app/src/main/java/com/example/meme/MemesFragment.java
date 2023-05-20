@@ -5,10 +5,15 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +51,8 @@ public class MemesFragment extends Fragment implements MemeInterface{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setExitTransition(inflater.inflateTransition(R.transition.fade));
     }
 
     @Override
@@ -113,16 +121,14 @@ public class MemesFragment extends Fragment implements MemeInterface{
 
     @Override
     public void openImageFullscreen(ImageView imageView, int pos) {
-        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        Dialog dialog = new Dialog(getContext(),R.style.Dialog);
+        //Dialog dialog = new Dialog(getContext(),R.style.Theme_AppCompat_Dark_NoActionBar_FullScreen);
         dialog.setContentView(R.layout.image_dialog);
-
         ImageView fullscreenImageView = dialog.findViewById(R.id.view_meme);
-
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         fullscreenImageView.setImageDrawable(imageView.getDrawable());
-
         TextView tv = dialog.findViewById(R.id.naziv_kanala);
         tv.setText(memes.get(pos).naziv_kanala);
-
 
         fullscreenImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,5 +142,6 @@ public class MemesFragment extends Fragment implements MemeInterface{
             }
         });
         dialog.show();
+
     }
 }

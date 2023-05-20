@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        //binding = null;
     }
 
 
