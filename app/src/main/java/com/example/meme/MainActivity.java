@@ -153,12 +153,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    @SuppressLint("ClickableViewAccessibility")
     public void test2(String videoUrl){
         navController.navigate(R.id.videos);
         currentURL = videoUrl;
         Hide();
-        VideoView videoView = this.findViewById(R.id.videoView);
     }
     public String URL(){
         return currentURL;
