@@ -70,7 +70,6 @@ public class playerFragment extends Fragment implements playerInterface{
         this.view = view;
         setVideo();
     }
-    @SuppressLint("ClickableViewAccessibility")
     public void setVideo(){
         String videoUrl = ((MainActivity)getActivity()).URL();
         VideoView videoView = view.findViewById(R.id.videoView);
@@ -90,7 +89,7 @@ public class playerFragment extends Fragment implements playerInterface{
         videoView.requestFocus();
 
         videoView.start();
-        };
+    };
     private void hideSystemUI() {
         if (getActivity() != null) {
             View decorView = getActivity().getWindow().getDecorView();
