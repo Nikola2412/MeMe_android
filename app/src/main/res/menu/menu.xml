@@ -11,7 +11,7 @@
     <item
         android:id="@+id/user"
         android:icon="@drawable/profile"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="User"
         />
     <item
@@ -22,10 +22,23 @@
     <item
         android:id="@+id/logout"
         android:icon="@drawable/logout"
-        android:title="Logout" />
+        android:title="Logout"
+
+        />
     <item
         android:id="@+id/setting"
         android:icon="@drawable/setting"
         android:title="Setting"
         />
+    <item android:id="@+id/file"
+        android:title="asdasdasd" >
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/create_new"
+                android:title="dasdasd" />
+            <item android:id="@+id/open"
+                android:title="en" />
+        </menu>
+    </item>
+
 </menu>

@@ -1,27 +1,18 @@
 package com.example.meme;
 
-import android.annotation.SuppressLint;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -31,15 +22,13 @@ import com.example.meme.databinding.FragmentPlayerBinding;
 
 import org.json.JSONArray;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-
 public class playerFragment extends Fragment implements playerInterface{
 
     //playerInterface playerInterface;
     //public ArrayList<Videos> videos;
     //private RecyclerView rv;
     private FragmentPlayerBinding binding;
+    VideoView videoView;
     View view;
 
     @Override
@@ -72,7 +61,7 @@ public class playerFragment extends Fragment implements playerInterface{
     }
     public void setVideo(){
         String videoUrl = ((MainActivity)getActivity()).URL();
-        VideoView videoView = view.findViewById(R.id.videoView);
+        videoView= view.findViewById(R.id.videoView);
         //Button back = view.findViewById(R.id.back_button);
         Uri uri = Uri.parse(videoUrl);
 

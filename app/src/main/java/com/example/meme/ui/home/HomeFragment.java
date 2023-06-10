@@ -1,5 +1,6 @@
 package com.example.meme.ui.home;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
