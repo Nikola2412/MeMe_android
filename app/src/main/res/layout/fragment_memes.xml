@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemesFragment"
-    android:paddingBottom="56dp">
+    tools:context=".MemesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/memes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
-        tools:listitem="@layout/meme"
-        />
+        tools:listitem="@layout/meme" />
 </androidx.constraintlayout.widget.ConstraintLayout>

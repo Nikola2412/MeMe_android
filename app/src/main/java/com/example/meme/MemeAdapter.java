@@ -57,8 +57,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder
         public MemeViewHolder(@NonNull View itemView, MemeInterface recycleViewInterface) {
             super(itemView);
             view = itemView;
-
-            itemView.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(recycleViewInterface !=null){
