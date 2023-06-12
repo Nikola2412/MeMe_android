@@ -80,7 +80,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
             icon = view.findViewById(R.id.kanal_icon);
 
-            Glide.with(context).load("http://192.168.1.9:3001/images/profile.png").into(icon);
+            //Glide.with(context).load("http://192.168.1.4:3001/images/profile.png").into(icon);
+            
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

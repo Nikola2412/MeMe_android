@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ import java.util.Locale;
 
 public class upload extends Fragment implements UploadMemeInterface{
 
-    final int READ_EXTERNAL_STORAGE = 100;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     private FragmentUploadBinding binding;
     public ArrayList<UploadMeme>memes;
@@ -58,8 +59,6 @@ public class upload extends Fragment implements UploadMemeInterface{
         View root = binding.getRoot();
         return root;
     }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         memes = new ArrayList<>();
@@ -88,7 +87,7 @@ public class upload extends Fragment implements UploadMemeInterface{
     }
     private void openFileExplorer() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");  // Postavite željeni tip datoteke ili "*" za sve vrste datoteka
+        intent.setType("image/*");  // Postavite željeni tip datoteke ili "*" za sve vrste datoteka
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 

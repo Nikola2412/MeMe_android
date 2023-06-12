@@ -60,12 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView navView;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        // Obrada rezultata zahteva za dozvolom
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
 
         /*
@@ -156,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void toast(String k)
     {
-        Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_LONG).show();
     }
     public void Hide(){
         getSupportActionBar().hide();
-        navView.setVisibility(View.INVISIBLE);
+        navView.setVisibility(View.GONE);
     }
     public void Show(){
         getSupportActionBar().show();
@@ -172,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
     public void test2(String videoUrl){
         navController.navigate(R.id.videos);
         currentURL = videoUrl;
-        Hide();
     }
     public String URL(){
         return currentURL;

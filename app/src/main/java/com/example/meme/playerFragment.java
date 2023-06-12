@@ -51,12 +51,8 @@ public class playerFragment extends Fragment implements playerInterface{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //((MainActivity)getActivity()).getSupportActionBar().hide();
-        //((MainActivity)getActivity()).setTheme(R.style.Theme_AppCompat_Dark_NoActionBar_FullScreen);
-
-        //videos = new ArrayList<>();
-        //playerInterface = this;
         this.view = view;
+        ((MainActivity)getActivity()).Hide();
         setVideo();
     }
     public void setVideo(){

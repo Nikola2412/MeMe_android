@@ -1,5 +1,6 @@
 package com.example.meme;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,14 +53,14 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
         ImageView meme;
         View view;
         public void setMeme(String path) {
-            meme = view.findViewById(R.id.mim);
+            //Toast.makeText(context,path, Toast.LENGTH_LONG).show();
             //Glide.with(context).load(new File(path)).into(meme);
-            Glide.with(context).load("http://192.168.1.4:3001/id_memea=ef7341c8-379c-4bc8-87e4-79d573cd64a7").into(meme);
+            Glide.with(context).load("http://192.168.1.4:3001/id_memea="+"2f39e46b-560c-4d6c-a8c0-da37f1ed7a1e").into(meme);
         }
         public MyViewHolder(@NonNull View itemView, UploadMemeInterface uploadMemeInterface) {
             super(itemView);
             view = itemView;
-
+            meme = view.findViewById(R.id.mim);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -71,7 +72,51 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     }
                 }
             });
+            meme.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    //Toast.makeText(context,Integer.toString(getAdapterPosition()), Toast.LENGTH_LONG).show();
+                    Dialog dialog = new Dialog(context,R.style.Dialog);
+                    dialog.setContentView(R.layout.delete_dialog);
+                    ImageView img  = dialog.findViewById(R.id.preview_meme);
+                    img.setImageDrawable(meme.getDrawable());
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            memes.remove(getAdapterPosition());
+                            notifyItemRemoved(getAdapterPosition());
+                        }
+                    });
+                    dialog.findViewById(R.id.edit_meme).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                            dialog.dismiss();
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(context,"Jos je u izdardi",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    dialog.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                    return true;
+                }
+            });
         }
     }
 }
