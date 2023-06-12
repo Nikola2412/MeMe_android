@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +49,9 @@ public class upload extends Fragment implements UploadMemeInterface{
     private RecyclerView recyclerView;
     UploadMemeAdapter umd;
 
+    ActivityResultLauncher<Intent> imageResulLauncher;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +79,8 @@ public class upload extends Fragment implements UploadMemeInterface{
             public void onClick(View v) {
                 //((MainActivity)getActivity()).toast(umd.getItemCount());
                 //((MainActivity)getActivity()).toast(memes.get(umd.getItemCount() - 1).Path);
-                ((MainActivity)getActivity()).toast(recyclerView.getChildCount());
+                ((MainActivity)getActivity()).toast(umd.getItemCount());
+                ((MainActivity)getActivity()).toast(memes.size());
             }
         });
         recyclerView = view.findViewById(R.id.lista_mimova);
@@ -105,13 +110,9 @@ public class upload extends Fragment implements UploadMemeInterface{
             if (data != null) {
                 Uri fileUri = data.getData();
                 if (fileUri != null) {
-                    String filePath = fileUri.getPath();
-                    String ip = getString(R.string.ip);
-                    UploadMeme meme = new UploadMeme(ip + "id_memea=ef7341c8-379c-4bc8-87e4-79d573cd64a7");
+                    UploadMeme meme = new UploadMeme(fileUri);
                     memes.add(meme);
-                    //((MainActivity)getActivity()).toast("dasdasd");
-                    umd.notifyItemInserted(0);
-                    File imgFile = new File(filePath);
+                    umd.notifyDataSetChanged();
                 }
             }
         }

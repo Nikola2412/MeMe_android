@@ -1,9 +1,11 @@
 package com.example.meme;
 
-public class UploadMeme {
-    public String Path;
+import android.net.Uri;
 
-    public UploadMeme(String path) {
+public class UploadMeme {
+    public Uri Path;
+
+    public UploadMeme(Uri path) {
         Path = path;
     }
 }

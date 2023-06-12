@@ -2,6 +2,7 @@ package com.example.meme;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +53,11 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView meme;
         View view;
-        public void setMeme(String path) {
+        public void setMeme(Uri path) {
             //Toast.makeText(context,path, Toast.LENGTH_LONG).show();
             //Glide.with(context).load(new File(path)).into(meme);
-            Glide.with(context).load("http://192.168.1.4:3001/id_memea="+"2f39e46b-560c-4d6c-a8c0-da37f1ed7a1e").into(meme);
+            //Glide.with(context).load("http://192.168.1.4:3001/id_memea="+"ef7341c8-379c-4bc8-87e4-79d573cd64a7").into(meme);
+            meme.setImageURI(path);
         }
         public MyViewHolder(@NonNull View itemView, UploadMemeInterface uploadMemeInterface) {
             super(itemView);
