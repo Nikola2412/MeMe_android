@@ -121,6 +121,13 @@ public class upload extends Fragment implements UploadMemeInterface{
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+
+    @Override
     public void onItemClick(int position) {
         ((MainActivity)getActivity()).toast(position);
     }

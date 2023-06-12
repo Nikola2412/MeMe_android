@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     private RecyclerView rv;
 
     View view;
+    MyAdapter md;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,12 +61,15 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onDestroyView() {
+        videos.clear();
+        md.notifyDataSetChanged();
+        binding = null;
         super.onDestroyView();
-        //binding = null;
     }
 
 
     public void callApi() {
+
         String url = "videos";
         String ip = getString(R.string.ip);
 
@@ -88,7 +92,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                 }
                 rv = view.findViewById(R.id.videos);
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
-                MyAdapter md = new MyAdapter(getContext(), videos,recycleViewInterface);
+                md = new MyAdapter(getContext(), videos,recycleViewInterface);
                 rv.setAdapter(md);
                 md.notifyDataSetChanged();
 

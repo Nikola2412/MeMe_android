@@ -64,7 +64,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public String username = "",password = "";
-    public int id_user;
+    public String id_user="";
     public boolean logged = false;
     public MenuItem login,logout,user;
     NavController navController;
@@ -75,15 +75,15 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences settings;
 
-    public void setLoginData(String user,String password,int id_user){
+    public void setLoginData(String user,String password,String id_user,Boolean logged){
         this.username = user;
         this.password = password;
         this.id_user = id_user;
-        logged = true;
+        this.logged = logged;
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("username",user);
         editor.putString("password",password);
-        editor.putInt("id_kanala",id_user);
+        editor.putString("id",id_user);
         editor.putBoolean("logged",logged);
         editor.apply();
         setLogged();
@@ -103,19 +103,40 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+    }
 
-        settings = getApplicationContext().getSharedPreferences("Podaci",0);
-
-        logged = settings.getBoolean("logged",false);
-        if(logged) {
-            username = settings.getString("username", "");
-            password = settings.getString("password", "");
-            id_user = settings.getInt("id_kanala", 0);
-            //toast(username);
+    public void checkUser(){
+        String url = "android_auth";
+        String ip = getString(R.string.ip);
+        try {
+            JSONObject data = new JSONObject();
+            data.put("username",username);
+            data.put("password",password);
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ip + url, data, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String id = response.optString("id");
+                    if(!id_user.equals(id)){
+                        toast("dasd");
+                        setLoginData("","","",false);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    toast(error.toString());
+                }
+            });
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(request);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
 
@@ -153,9 +174,10 @@ public class MainActivity extends AppCompatActivity {
                     JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ip + url, data, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            int id = response.optInt("id");
-                            if(id>0){
-                                setLoginData(username,password,id);
+                            String id = response.optString("id");
+                            //toast(id);
+                            if(!id.equals("-1")){
+                                setLoginData(username,password,id,true);
                                 dialog.dismiss();
                             }
                         }
@@ -175,6 +197,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void logout(){
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -187,8 +213,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         logout = menu.findItem(R.id.logout);
+        logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                logout();
+                return false;
+            }
+        });
         user = menu.findItem(R.id.username);
         setLogged();
+        settings = getApplicationContext().getSharedPreferences("Podaci",0);
+
+        logged = settings.getBoolean("logged",false);
+        if(logged) {
+            username = settings.getString("username","");
+            password = settings.getString("password","");
+            id_user = settings.getString("id","");
+            checkUser();
+        }
         return true;
     }
     @Override

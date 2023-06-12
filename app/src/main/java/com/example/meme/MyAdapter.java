@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.meme.ui.home.RecycleViewInterface;
 
 
@@ -22,7 +25,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private final RecycleViewInterface recycleViewInterface;
     static Context context;
-    String ip;
     ArrayList<Videos> videosArrayList;
 
     public MyAdapter(Context context, ArrayList<Videos> videos, RecycleViewInterface recycleViewInterface){
@@ -69,7 +71,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
         public void setThubnaile(String url) {
             thubnaile = view.findViewById(R.id.title_image);
-            Glide.with(context).load(url).into(thubnaile);
+            Glide.with(context).load(url).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(thubnaile);
         }
 
         public MyViewHolder(@NonNull View itemView,RecycleViewInterface recycleViewInterface) {
@@ -79,8 +81,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             ime = itemView.findViewById(R.id.kanal_naziv);
 
             icon = view.findViewById(R.id.kanal_icon);
-
-            //Glide.with(context).load("http://192.168.1.4:3001/images/profile.png").into(icon);
+            Glide.with(context).load("http://192.168.1.4:3001/images/profile.png").transform(new CircleCrop()).into(icon);
             
 
             itemView.setOnClickListener(new View.OnClickListener() {
