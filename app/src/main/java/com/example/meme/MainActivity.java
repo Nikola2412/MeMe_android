@@ -9,6 +9,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -23,6 +24,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResult;
@@ -45,21 +52,42 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.meme.databinding.ActivityMainBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    public String username = "",password = "";
+    public int id_user;
     public boolean logged = false;
-    public MenuItem login,logout;
+    public MenuItem login,logout,user;
     NavController navController;
 
     String currentURL;
 
     BottomNavigationView navView;
 
+    SharedPreferences settings;
+
+    public void setLoginData(String user,String password,int id_user){
+        this.username = user;
+        this.password = password;
+        this.id_user = id_user;
+        logged = true;
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("username",user);
+        editor.putString("password",password);
+        editor.putInt("id_kanala",id_user);
+        editor.putBoolean("logged",logged);
+        editor.apply();
+        setLogged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,42 +107,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        settings = getApplicationContext().getSharedPreferences("Podaci",0);
 
-        /*
-        findViewById(R.id.navigation_upload).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog dialog = new Dialog(MainActivity.this);
-                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.upload_dialog);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-                Button meme = dialog.findViewById(R.id.upload_meme);
-                Button video = dialog.findViewById(R.id.upload_video);
-
-                meme.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toast("Meme");
-                        dialog.dismiss();
-                    }
-                });
-                video.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toast("Video");
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-            }
-
-        });
-
-         */
+        logged = settings.getBoolean("logged",false);
+        if(logged) {
+            username = settings.getString("username", "");
+            password = settings.getString("password", "");
+            id_user = settings.getInt("id_kanala", 0);
+            //toast(username);
+        }
     }
 
 
@@ -122,18 +123,71 @@ public class MainActivity extends AppCompatActivity {
         if(!logged){
             logout.setVisible(true);
             logout.setVisible(false);
+            user.setTitle("User");
         }
         else {
+            user.setTitle(username);
             login.setVisible(false);
             logout.setVisible(true);
         }
+    }
+
+    public void login_function() {
+        String url = "android_auth";
+        String ip = getString(R.string.ip);
+        Dialog dialog = new Dialog(this,R.style.Dialog);
+        dialog.setContentView(R.layout.login);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText user = dialog.findViewById(R.id.Username);
+                String username = user.getText().toString();
+                EditText pass = dialog.findViewById(R.id.Password);
+                String password = pass.getText().toString();
+                try {
+                    JSONObject data = new JSONObject();
+                    data.put("username",username);
+                    data.put("password",password);
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ip + url, data, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            int id = response.optInt("id");
+                            if(id>0){
+                                setLoginData(username,password,id);
+                                dialog.dismiss();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            toast(error.toString());
+                        }
+                    });
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue.add(request);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        dialog.show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         login = menu.findItem(R.id.login);
+        login.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                login_function();
+                return false;
+            }
+        });
         logout = menu.findItem(R.id.logout);
+        user = menu.findItem(R.id.username);
         setLogged();
         return true;
     }
@@ -145,6 +199,10 @@ public class MainActivity extends AppCompatActivity {
     public void toast(int k)
     {
         Toast.makeText(this.getApplicationContext(), Integer.toString(k), Toast.LENGTH_SHORT).show();
+    }
+    public void toast(Boolean k)
+    {
+        Toast.makeText(this.getApplicationContext(), Boolean.toString(k), Toast.LENGTH_LONG).show();
     }
     public void toast(String k)
     {

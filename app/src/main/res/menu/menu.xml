@@ -15,6 +15,10 @@
         android:title="User"
         />
     <item
+        android:id="@+id/username"
+        android:title="User"
+        />
+    <item
         android:id="@+id/login"
         android:icon="@drawable/log_in"
         android:title="Login"
@@ -30,6 +34,7 @@
         android:icon="@drawable/setting"
         android:title="Setting"
         />
+
     <item android:id="@+id/file"
         android:title="asdasdasd" >
         <!-- "file" submenu -->

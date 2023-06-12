@@ -2,38 +2,34 @@ package com.example.meme;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.meme.databinding.FragmentUploadBinding;
 
-import java.io.File;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Locale;
 
 
 public class upload extends Fragment implements UploadMemeInterface{
@@ -49,8 +45,6 @@ public class upload extends Fragment implements UploadMemeInterface{
     private RecyclerView recyclerView;
     UploadMemeAdapter umd;
 
-    ActivityResultLauncher<Intent> imageResulLauncher;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +57,7 @@ public class upload extends Fragment implements UploadMemeInterface{
         View root = binding.getRoot();
         return root;
     }
+
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         memes = new ArrayList<>();
@@ -71,16 +66,23 @@ public class upload extends Fragment implements UploadMemeInterface{
         view.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileExplorer();
+                if(((MainActivity)getActivity()).logged)
+                    openFileExplorer();
+                else {
+                    ((MainActivity)getActivity()).login_function();
+                }
             }
         });
         view.findViewById(R.id.upload_meme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //((MainActivity)getActivity()).toast(umd.getItemCount());
-                //((MainActivity)getActivity()).toast(memes.get(umd.getItemCount() - 1).Path);
-                ((MainActivity)getActivity()).toast(umd.getItemCount());
-                ((MainActivity)getActivity()).toast(memes.size());
+                if(((MainActivity)getActivity()).logged){
+
+                }
+                else {
+                    ((MainActivity)getActivity()).login_function();
+
+                }
             }
         });
         recyclerView = view.findViewById(R.id.lista_mimova);

@@ -1,23 +1,13 @@
 package com.example.meme.ui.home;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.app.Application;
-import android.app.Dialog;
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +16,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
 import com.example.meme.MyAdapter;
@@ -35,22 +23,10 @@ import com.example.meme.R;
 import com.example.meme.Videos;
 import com.example.meme.databinding.FragmentHomeBinding;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements RecycleViewInterface{
 
@@ -92,7 +68,6 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     public void callApi() {
         String url = "videos";
         String ip = getString(R.string.ip);
-        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
             @Override
