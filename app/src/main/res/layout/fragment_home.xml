@@ -7,9 +7,20 @@
     tools:context=".ui.home.HomeFragment"
     >
 
+    <ImageView
+        android:id="@+id/noNet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/nonet"
+        android:background="@color/white"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/videos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/video" />
+        tools:listitem="@layout/video" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

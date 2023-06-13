@@ -16,6 +16,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ public class MemesFragment extends Fragment implements MemeInterface{
 
     public ArrayList<Meme> memes;
     private RecyclerView rv;
+    MemeAdapter md;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,22 @@ public class MemesFragment extends Fragment implements MemeInterface{
         memes = new ArrayList<>();
         recycleViewInterface = this;
         ((MainActivity)getActivity()).Show();
-        callApi(view);
+        rv = view.findViewById(R.id.memes);
+        if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
+            // Pristup internetu je dostupan
+            view.findViewById(R.id.noNet).setVisibility(View.GONE);
+            rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            rv.setVisibility(View.VISIBLE);
+            md = new MemeAdapter(getContext(),memes, recycleViewInterface);
+            rv.setAdapter(md);
+            md.notifyDataSetChanged();
+            callApi();
+
+        } else {
+            // Pristup internetu nije dostupan
+            rv.setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.noNet).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -81,7 +98,7 @@ public class MemesFragment extends Fragment implements MemeInterface{
         binding=null;
     }
 
-    public void callApi(View view) {
+    public void callApi() {
         String url = "memes";
         String ip = getString(R.string.ip);
 
@@ -96,10 +113,6 @@ public class MemesFragment extends Fragment implements MemeInterface{
                     Meme meme = new Meme(ip + "id_memea=" + id,id_kanala,naziv_kanala);
                     memes.add(meme);
                 }
-                rv = view.findViewById(R.id.memes);
-                rv.setLayoutManager(new LinearLayoutManager(getContext()));
-                MemeAdapter md = new MemeAdapter(getContext(),memes, recycleViewInterface);
-                rv.setAdapter(md);
                 md.notifyDataSetChanged();
 
             }

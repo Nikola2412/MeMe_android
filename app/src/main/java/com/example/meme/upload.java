@@ -34,8 +34,6 @@ import java.util.ArrayList;
 
 public class upload extends Fragment implements UploadMemeInterface{
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-
     private FragmentUploadBinding binding;
     public ArrayList<UploadMeme>memes;
     private static final int FILE_SELECT_CODE = 1;
@@ -125,8 +123,6 @@ public class upload extends Fragment implements UploadMemeInterface{
         super.onDestroyView();
         binding = null;
     }
-
-
     @Override
     public void onItemClick(int position) {
         ((MainActivity)getActivity()).toast(position);

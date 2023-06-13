@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,14 +56,26 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
         videos = new ArrayList<>();
         recycleViewInterface = this;
         this.view = view;
-        callApi();
+        rv = view.findViewById(R.id.videos);
         ((MainActivity)getActivity()).Show();
+        if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
+            // Pristup internetu je dostupan
+            view.findViewById(R.id.noNet).setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
+            rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            md = new MyAdapter(getContext(), videos, recycleViewInterface);
+            rv.setAdapter(md);
+            md.notifyDataSetChanged();
+            callApi();
+        } else {
+            // Pristup internetu nije dostupan
+            rv.setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.noNet).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onDestroyView() {
-        videos.clear();
-        md.notifyDataSetChanged();
         binding = null;
         super.onDestroyView();
     }
@@ -79,7 +92,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                 JSONObject json = new JSONObject();
                 //((MainActivity) getActivity()).toast(response.toString());
 
-                for(int i=0; i<response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
                     JSONObject json_data = response.optJSONObject(i);
                     //((MainActivity) getActivity()).toast(json_data.optString("ime"));
                     int id = json_data.optInt("id");
@@ -87,22 +100,19 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                     String name = json_data.optString("name");
                     //String name = json_data.optString("name");
                     Videos video = new Videos(ime,
-                            ip+"thubnails/" + id + ".jpg", ip + "android_id_videa="+id,name);
+                            ip + "thubnails/" + id + ".jpg", ip + "android_id_videa=" + id, name);
                     videos.add(video);
                 }
-                rv = view.findViewById(R.id.videos);
-                rv.setLayoutManager(new LinearLayoutManager(getContext()));
-                md = new MyAdapter(getContext(), videos,recycleViewInterface);
-                rv.setAdapter(md);
                 md.notifyDataSetChanged();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ((MainActivity) getActivity()).toast(error.toString());
+
             }
-        });
+        }
+        );
 
         RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
         requestQueue.add(request);
