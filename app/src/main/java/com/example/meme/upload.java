@@ -77,7 +77,7 @@ public class upload extends Fragment implements UploadMemeInterface{
             @Override
             public void onClick(View v) {
                 if(((MainActivity)getActivity()).logged){
-
+                    ((MainActivity)getActivity()).toast("Jos je u izradi");
                 }
                 else {
                     ((MainActivity)getActivity()).login_function();
