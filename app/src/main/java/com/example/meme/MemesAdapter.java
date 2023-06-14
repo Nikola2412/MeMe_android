@@ -12,30 +12,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import com.example.meme.MemeInterface;
 
-public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder> {
+public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHolder> {
 
-    private final MemeInterface memeInterface;
+    private final MemesInterface memesInterface;
     static Context context;
     ArrayList<Meme> memeArrayList;
 
-    public MemeAdapter(Context context, ArrayList<Meme> memes, MemeInterface memeInterface){
+    public MemesAdapter(Context context, ArrayList<Meme> memes, MemesInterface memesInterface){
         this.context = context;
         this.memeArrayList = memes;
-        this.memeInterface = memeInterface;
+        this.memesInterface = memesInterface;
     }
 
     @NonNull
     @Override
-    public MemeAdapter.MemeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MemesAdapter.MemeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.meme,parent,false);
 
-        return new MemeAdapter.MemeViewHolder(v,memeInterface);
+        return new MemesAdapter.MemeViewHolder(v, memesInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MemeAdapter.MemeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MemesAdapter.MemeViewHolder holder, int position) {
         Meme meme = memeArrayList.get(position);
         holder.setMeme(meme.id);
     }
@@ -54,7 +53,7 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder
             Glide.with(context).load(id).into(meme);
         }
 
-        public MemeViewHolder(@NonNull View itemView, MemeInterface recycleViewInterface) {
+        public MemeViewHolder(@NonNull View itemView, MemesInterface recycleViewInterface) {
             super(itemView);
             view = itemView;
             view.setOnClickListener(new View.OnClickListener() {

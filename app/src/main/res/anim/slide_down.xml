@@ -2,7 +2,7 @@
     android:shareInterpolator="@android:anim/linear_interpolator">
 
     <translate
-        android:fromYDelta="0%"
-        android:toYDelta="-100%"
+        android:fromYDelta="-100%"
+        android:toYDelta="0%"
         android:duration="200" />
 </set>

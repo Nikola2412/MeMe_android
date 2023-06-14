@@ -145,6 +145,7 @@ public class playerFragment extends Fragment implements playerInterface{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ((MainActivity)getActivity()).Show();
         binding = null;
     }
 

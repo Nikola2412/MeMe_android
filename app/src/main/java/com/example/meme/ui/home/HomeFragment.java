@@ -1,13 +1,18 @@
 package com.example.meme.ui.home;
 
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,15 +54,16 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
         View root = binding.getRoot();
         return root;
     }
-
+    static boolean scroll_down;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //ActionBar actionBar = ((MainActivity)getActivity()).actionBar;
         videos = new ArrayList<>();
         recycleViewInterface = this;
         this.view = view;
         rv = view.findViewById(R.id.videos);
-        ((MainActivity)getActivity()).Show();
+        //Toolbar toolbar =((MainActivity)getActivity()).toolbar;
         if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
             // Pristup internetu je dostupan
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
@@ -67,7 +73,33 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
             rv.setAdapter(md);
             md.notifyDataSetChanged();
             callApi();
-        } else {
+
+
+            rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (scroll_down) {
+                        ((MainActivity)getActivity()).actionBar.hide();
+                    } else {
+                        ((MainActivity)getActivity()).actionBar.show();
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 0) {
+                        scroll_down = true;
+                    } else if (dy < 0) {
+                        scroll_down = false;
+                    }
+                }
+            });
+
+
+        }
+        else {
             // Pristup internetu nije dostupan
             rv.setVisibility(View.INVISIBLE);
             view.findViewById(R.id.noNet).setVisibility(View.VISIBLE);
@@ -76,8 +108,10 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
 
     @Override
     public void onDestroyView() {
-        binding = null;
         super.onDestroyView();
+        binding = null;
+        ((MainActivity)getActivity()).actionBar.show();
+
     }
 
 

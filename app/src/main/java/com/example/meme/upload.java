@@ -61,6 +61,8 @@ public class upload extends Fragment implements UploadMemeInterface{
         memes = new ArrayList<>();
         uploadMemeInterface = this;
         this.view = view;
+        ((MainActivity)getActivity()).actionBar.show();
+
         view.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

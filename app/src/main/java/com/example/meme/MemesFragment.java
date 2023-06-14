@@ -1,28 +1,18 @@
 package com.example.meme;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,22 +23,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.meme.databinding.FragmentMemesBinding;
-import com.example.meme.MemeInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class MemesFragment extends Fragment implements MemeInterface{
+public class MemesFragment extends Fragment implements MemesInterface {
 
-    MemeInterface recycleViewInterface;
+    MemesInterface recycleViewInterface;
     private FragmentMemesBinding binding;
 
     public ArrayList<Meme> memes;
     private RecyclerView rv;
-    MemeAdapter md;
+    MemesAdapter md;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,23 +55,45 @@ public class MemesFragment extends Fragment implements MemeInterface{
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_memes, container, false);
     }
+    static boolean scroll_down;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         memes = new ArrayList<>();
         recycleViewInterface = this;
-        ((MainActivity)getActivity()).Show();
         rv = view.findViewById(R.id.memes);
         if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
             // Pristup internetu je dostupan
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
             rv.setVisibility(View.VISIBLE);
-            md = new MemeAdapter(getContext(),memes, recycleViewInterface);
+            md = new MemesAdapter(getContext(),memes, recycleViewInterface);
             rv.setAdapter(md);
             md.notifyDataSetChanged();
             callApi();
+
+            rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (scroll_down) {
+                        ((MainActivity)getActivity()).actionBar.hide();
+                    } else {
+                        ((MainActivity)getActivity()).actionBar.show();
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 0) {
+                        scroll_down = true;
+                    } else if (dy < 0) {
+                        scroll_down = false;
+                    }
+                }
+            });
 
         } else {
             // Pristup internetu nije dostupan
@@ -96,6 +106,8 @@ public class MemesFragment extends Fragment implements MemeInterface{
     public void onDestroyView() {
         super.onDestroyView();
         binding=null;
+        ((MainActivity)getActivity()).actionBar.show();
+
     }
 
     public void callApi() {

@@ -2,7 +2,7 @@ package com.example.meme;
 
 import android.widget.ImageView;
 
-public interface MemeInterface {
+public interface MemesInterface {
     void onItemClick(int position);
     void openImageFullscreen(ImageView imageView,int pos);
 }
