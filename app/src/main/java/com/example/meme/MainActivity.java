@@ -1,22 +1,35 @@
 package com.example.meme;
 
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -48,6 +61,16 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences settings;
 
+
+    private ConstraintLayout mainLayout;
+    private FrameLayout PlayerContainer;
+    private VideoView videoView;
+    private ImageButton expandButton;
+    private ImageView canclePlayer;
+    private float dX, dY;
+    private int W,H;
+    private boolean isExpanded = false;
+
     public void setLoginData(String user,String password,String id_user,Boolean logged){
         this.username = user;
         this.password = password;
@@ -63,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public Toolbar toolbar;
     public ActionBar actionBar;
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +109,83 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
 
+
+        mainLayout = findViewById(R.id.container);
+        PlayerContainer = findViewById(R.id.PlayerContainer);
+        videoView = findViewById(R.id.videoView);
+        canclePlayer = findViewById(R.id.cancle_player);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        W = displayMetrics.widthPixels;
+        H = displayMetrics.heightPixels;
+
+        PlayerContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //dX = v.getX() - event.getRawX();
+                        dY = v.getY() - event.getRawY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if(PlayerContainer.getY()  > toolbar.getHeight()) {
+                            v.animate()
+                                    .y(event.getRawY() + dY)
+                                    .setDuration(0)
+                                    .start();
+                        }
+                        if(PlayerContainer.getY()<toolbar.getHeight()){
+                            v.animate()
+                                    .y(toolbar.getHeight())
+                                    .setDuration(0)
+                                    .start();
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // Provera da li je mini plejer prevučen dovoljno visoko za proširivanje
+                        /*
+                        if (v.getY() < H / 3) {
+                            expandMiniPlayer();
+                        }
+                        else if (event.getRawY() > H - navView.getHeight()){
+                            closePlayer();
+                        }
+                        else {
+                            resetMiniPlayerPosition();
+                        }
+                         */
+                        break;
+                }
+                return true;
+            }
+        });
+        canclePlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetMiniPlayerPosition();
+                PlayerContainer.setVisibility(View.INVISIBLE);
+                videoView.suspend();
+            }
+        });
     }
 
+    private void closePlayer() {
+        resetMiniPlayerPosition();
+        PlayerContainer.setVisibility(View.INVISIBLE);
+    }
+
+    private void expandMiniPlayer() {
+        isExpanded = true;
+
+    }
+
+    private void resetMiniPlayerPosition() {
+        PlayerContainer.animate()
+                .y(mainLayout.getHeight() - PlayerContainer.getHeight() - navView.getHeight() - 16)
+                .setDuration(200)
+                .start();
+    }
 
     public void checkUser(){
         String url = "android_auth";
@@ -239,9 +337,14 @@ public class MainActivity extends AppCompatActivity {
             navView.setVisibility(View.VISIBLE);
         }
     }
-    public void test2(String videoUrl){
-        navController.navigate(R.id.videos);
+    @SuppressLint("ClickableViewAccessibility")
+    public void setVideo(String videoUrl){
         currentURL = videoUrl;
+        PlayerContainer.setVisibility(View.VISIBLE);
+        videoView.setVideoURI(Uri.parse(currentURL));
+        videoView.start();
+        canclePlayer.setVisibility(View.VISIBLE);
+        Show();
     }
     public String URL(){
         return currentURL;

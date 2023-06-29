@@ -155,7 +155,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     @Override
     public void onItemClick(int position) {
         //((MainActivity)getActivity()).toast(videos.get(position).link);
-        ((MainActivity) getActivity()).test2(videos.get(position).link);
+        ((MainActivity) getActivity()).setVideo(videos.get(position).link);
     }
 
     @Override

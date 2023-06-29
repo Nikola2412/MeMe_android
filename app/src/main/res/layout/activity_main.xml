@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mytoolbar"
         android:layout_width="match_parent"
@@ -46,6 +47,34 @@
         app:layout_constraintTop_toBottomOf="@+id/mytoolbar"
         />
 
+    <!-- Mini video plejer -->
+    <FrameLayout
+        android:id="@+id/PlayerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:layout_marginBottom="16px"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
+        android:background="@color/white"
+        >
 
+        <!-- Prikazivanje minijaturnog videa -->
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/cancle_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_cancel_24"
+            android:layout_gravity="end|center_vertical"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
