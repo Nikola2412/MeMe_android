@@ -1,5 +1,7 @@
 package com.example.meme;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -129,22 +131,30 @@ public class MainActivity extends AppCompatActivity {
                         dY = v.getY() - event.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if(PlayerContainer.getY()  > toolbar.getHeight()) {
                             v.animate()
                                     .y(event.getRawY() + dY)
-                                    .setDuration(0)
+                                    .setDuration(0).setListener(new AnimatorListenerAdapter() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            super.onAnimationEnd(animation);
+                                        }
+                                    })
                                     .start();
-                        }
                         if(PlayerContainer.getY()<toolbar.getHeight()){
                             v.animate()
                                     .y(toolbar.getHeight())
-                                    .setDuration(0)
+                                    .setDuration(0).setListener(new AnimatorListenerAdapter() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            super.onAnimationEnd(animation);
+                                        }
+                                    })
                                     .start();
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         // Provera da li je mini plejer prevučen dovoljno visoko za proširivanje
-                        /*
+
                         if (v.getY() < H / 3) {
                             expandMiniPlayer();
                         }
@@ -154,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         else {
                             resetMiniPlayerPosition();
                         }
-                         */
+
                         break;
                 }
                 return true;
@@ -163,27 +173,35 @@ public class MainActivity extends AppCompatActivity {
         canclePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetMiniPlayerPosition();
-                PlayerContainer.setVisibility(View.INVISIBLE);
-                videoView.suspend();
+                PlayerContainer.animate().y(navView.getY() + PlayerContainer.getY()).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        closePlayer();
+                        super.onAnimationEnd(animation);
+                    }
+                }).start();
             }
         });
     }
 
     private void closePlayer() {
-        resetMiniPlayerPosition();
+        videoView.pause();
         PlayerContainer.setVisibility(View.INVISIBLE);
     }
 
     private void expandMiniPlayer() {
         isExpanded = true;
-
     }
 
     private void resetMiniPlayerPosition() {
         PlayerContainer.animate()
                 .y(mainLayout.getHeight() - PlayerContainer.getHeight() - navView.getHeight() - 16)
-                .setDuration(200)
+                .setDuration(500).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                    }
+                })
                 .start();
     }
 
@@ -337,14 +355,12 @@ public class MainActivity extends AppCompatActivity {
             navView.setVisibility(View.VISIBLE);
         }
     }
-    @SuppressLint("ClickableViewAccessibility")
     public void setVideo(String videoUrl){
+        resetMiniPlayerPosition();
         currentURL = videoUrl;
         PlayerContainer.setVisibility(View.VISIBLE);
         videoView.setVideoURI(Uri.parse(currentURL));
         videoView.start();
-        canclePlayer.setVisibility(View.VISIBLE);
-        Show();
     }
     public String URL(){
         return currentURL;

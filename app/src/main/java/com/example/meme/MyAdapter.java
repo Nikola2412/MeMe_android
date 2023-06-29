@@ -1,5 +1,7 @@
 package com.example.meme;
 
+import static com.example.meme.R.drawable.baseline_account_circle_24;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             ime = itemView.findViewById(R.id.kanal_naziv);
 
             icon = view.findViewById(R.id.kanal_icon);
-            Glide.with(context).load("http://192.168.1.4:3001/images/profile.png").transform(new CircleCrop()).into(icon);
+            //Glide.with(context).load("http://192.168.1.4:3001/images/profile.png").transform(new CircleCrop()).into(icon);
             
 
             itemView.setOnClickListener(new View.OnClickListener() {
