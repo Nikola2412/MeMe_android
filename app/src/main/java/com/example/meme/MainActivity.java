@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout PlayerContainer;
     private VideoView videoView;
     private ImageButton expandButton;
-    private ImageView canclePlayer;
+    private ImageView closePlayer;
     private float dX, dY;
     private int W,H;
     private boolean isExpanded = false;
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
         setLogged();
     }
+
     public Toolbar toolbar;
     public ActionBar actionBar;
     @SuppressLint("ClickableViewAccessibility")
@@ -111,11 +112,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
 
-
         mainLayout = findViewById(R.id.container);
         PlayerContainer = findViewById(R.id.PlayerContainer);
         videoView = findViewById(R.id.videoView);
-        canclePlayer = findViewById(R.id.cancle_player);
+        closePlayer = findViewById(R.id.cancle_player);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     })
                                     .start();
-                        if(PlayerContainer.getY()<toolbar.getHeight()){
+                        if(PlayerContainer.getY()<0){
                             v.animate()
-                                    .y(toolbar.getHeight())
+                                    .y(0)
                                     .setDuration(0).setListener(new AnimatorListenerAdapter() {
                                         @Override
                                         public void onAnimationEnd(Animator animation) {
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                         // Provera da li je mini plejer prevučen dovoljno visoko za proširivanje
 
                         if (v.getY() < H / 3) {
-                            expandMiniPlayer();
+                            resetBigPlayer();
                         }
                         else if (event.getRawY() > H - navView.getHeight()){
                             closePlayer();
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        canclePlayer.setOnClickListener(new View.OnClickListener() {
+        closePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlayerContainer.animate().y(navView.getY() + PlayerContainer.getY()).setDuration(500).setListener(new AnimatorListenerAdapter() {
@@ -187,15 +187,27 @@ public class MainActivity extends AppCompatActivity {
     private void closePlayer() {
         videoView.pause();
         PlayerContainer.setVisibility(View.INVISIBLE);
+        Show();
     }
 
-    private void expandMiniPlayer() {
-        isExpanded = true;
+    private void resetBigPlayer() {
+        PlayerContainer.animate()
+                .y(0)
+                .setDuration(500).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                    }
+                })
+                .start();
     }
 
     private void resetMiniPlayerPosition() {
+        //da se izmenii da veliki player postane manji
+
+
         PlayerContainer.animate()
-                .y(mainLayout.getHeight() - PlayerContainer.getHeight() - navView.getHeight() - 16)
+                .y(mainLayout.getHeight() - PlayerContainer.getHeight() - navView.getHeight())
                 .setDuration(500).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -219,11 +231,15 @@ public class MainActivity extends AppCompatActivity {
                     if(!id_user.equals(id)){
                         setLoginData("","","",false);
                     }
+                    else {
+                        setLogged();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     toast(error.toString());
+                    setLoginData("","","",false);
                 }
             });
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -317,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
         });
         user = menu.findItem(R.id.username);
         setLogged();
+
         settings = getApplicationContext().getSharedPreferences("Podaci",0);
 
         logged = settings.getBoolean("logged",false);
@@ -326,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
             id_user = settings.getString("id","");
             checkUser();
         }
+
         return true;
     }
     @Override
@@ -346,17 +364,44 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this.getApplicationContext(), k, Toast.LENGTH_LONG).show();
     }
     public void Hide(){
-        actionBar.hide();
-        navView.setVisibility(View.GONE);
+        toolbar.animate().y(-toolbar.getHeight()).setDuration(250).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                actionBar.hide();
+            }
+        }).start();
+        navView.animate().y(navView.getY() + navView.getHeight()).setDuration(250).start();
     }
     public void Show(){
-        actionBar.show();
-        if (navView != null) {
-            navView.setVisibility(View.VISIBLE);
-        }
+
+        navView.animate().y(mainLayout.getHeight() - navView.getHeight()).setDuration(250).start();
+        toolbar.animate().y(0).setDuration(250).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                actionBar.show();
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                actionBar.show();
+            }
+        }).start();
+    }
+    public void BigPlayer(){
+        PlayerContainer.animate()
+            .y(0)
+            .setDuration(500).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                }
+            })
+            .start();
+        closePlayer.setVisibility(View.INVISIBLE);
     }
     public void setVideo(String videoUrl){
-        resetMiniPlayerPosition();
+        Hide();
+        BigPlayer();
         currentURL = videoUrl;
         PlayerContainer.setVisibility(View.VISIBLE);
         videoView.setVideoURI(Uri.parse(currentURL));

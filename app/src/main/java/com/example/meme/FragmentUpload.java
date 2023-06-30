@@ -2,7 +2,6 @@ package com.example.meme;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,21 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.meme.databinding.FragmentUploadBinding;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public class upload extends Fragment implements UploadMemeInterface{
+public class FragmentUpload extends Fragment implements UploadMemeInterface{
 
     private FragmentUploadBinding binding;
     public ArrayList<UploadMeme>memes;
@@ -66,8 +55,9 @@ public class upload extends Fragment implements UploadMemeInterface{
         view.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((MainActivity)getActivity()).logged)
+                if(((MainActivity)getActivity()).logged) {
                     openFileExplorer();
+                }
                 else {
                     ((MainActivity)getActivity()).login_function();
                 }

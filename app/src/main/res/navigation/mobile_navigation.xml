@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_upload"
-        android:name="com.example.meme.upload"
+        android:name="com.example.meme.FragmentUpload"
         android:label="@string/app_name"
         />
 

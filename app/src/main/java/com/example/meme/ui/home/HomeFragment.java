@@ -80,9 +80,9 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     if (scroll_down) {
-                        ((MainActivity)getActivity()).actionBar.hide();
+                        //((MainActivity)getActivity()).actionBar.hide();
                     } else {
-                        ((MainActivity)getActivity()).actionBar.show();
+                        //((MainActivity)getActivity()).actionBar.show();
                     }
                 }
 
