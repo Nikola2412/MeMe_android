@@ -117,10 +117,7 @@ public class MainActivity extends AppCompatActivity {
         videoView = findViewById(R.id.videoView);
         closePlayer = findViewById(R.id.cancle_player);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        W = displayMetrics.widthPixels;
-        H = displayMetrics.heightPixels;
+        H = PlayerContainer.getHeight();
 
         PlayerContainer.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -129,17 +126,24 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         //dX = v.getX() - event.getRawX();
                         dY = v.getY() - event.getRawY();
+                        if (dY>mainLayout.getHeight()/3){
+                            Hide();
+                        }
+                        else {
+                            Show();
+                        }
                         break;
                     case MotionEvent.ACTION_MOVE:
-                            v.animate()
-                                    .y(event.getRawY() + dY)
-                                    .setDuration(0).setListener(new AnimatorListenerAdapter() {
-                                        @Override
-                                        public void onAnimationEnd(Animator animation) {
-                                            super.onAnimationEnd(animation);
-                                        }
-                                    })
-                                    .start();
+                        v.animate()
+                                .y(event.getRawY() + dY)
+                                .setDuration(0)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                    }
+                                }).start();
+
                         if(PlayerContainer.getY()<0){
                             v.animate()
                                     .y(0)
@@ -150,15 +154,29 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     })
                                     .start();
+                            PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
                         }
+
+                        if (PlayerContainer.getY()>mainLayout.getHeight()/3){
+                            PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,videoView.getHeight()));
+                        }
+                        else {
+                            PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                        }
+
+                        if (dY>0){
+                            toast("dole");
+                        }
+
                         break;
                     case MotionEvent.ACTION_UP:
                         // Provera da li je mini plejer prevučen dovoljno visoko za proširivanje
 
-                        if (v.getY() < H / 3) {
+                        if (v.getY() < mainLayout.getHeight() / 3) {
                             resetBigPlayer();
+                            Hide();
                         }
-                        else if (event.getRawY() > H - navView.getHeight()){
+                        else if (event.getRawY() > mainLayout.getHeight() - navView.getHeight()){
                             closePlayer();
                         }
                         else {
@@ -201,6 +219,12 @@ public class MainActivity extends AppCompatActivity {
         PlayerContainer.animate()
                 .y(0)
                 .setDuration(500).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                        super.onAnimationStart(animation);
+                    }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -385,11 +409,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 actionBar.show();
+                super.onAnimationEnd(animation);
             }
 
             @Override
             public void onAnimationStart(Animator animation) {
                 actionBar.show();
+                super.onAnimationStart(animation);
             }
         }).start();
     }
@@ -400,13 +426,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
+                    PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                    Hide();
                 }
             })
             .start();
         closePlayer.setVisibility(View.INVISIBLE);
     }
     public void setVideo(String videoUrl){
-        Hide();
         BigPlayer();
         currentURL = videoUrl;
         PlayerContainer.setVisibility(View.VISIBLE);
