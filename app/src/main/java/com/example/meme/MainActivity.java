@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                             closePlayer();
                         }
                         else {
-                            resetMiniPlayerPosition();
+                            //resetMiniPlayerPosition();
                         }
 
                         break;
@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         closePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void closePlayer() {
         videoView.pause();
+        PlayerContainer.animate().y(mainLayout.getHeight()).setDuration(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+            }
+        }).start();
         PlayerContainer.setVisibility(View.INVISIBLE);
         Show();
     }
@@ -204,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetMiniPlayerPosition() {
         //da se izmenii da veliki player postane manji
-
 
         PlayerContainer.animate()
                 .y(mainLayout.getHeight() - PlayerContainer.getHeight() - navView.getHeight())
