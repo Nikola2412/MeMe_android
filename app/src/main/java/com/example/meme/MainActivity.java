@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setLogged(){
         if(!logged){
-            logout.setVisible(true);
+            login.setVisible(true);
             logout.setVisible(false);
             user.setTitle("User");
         }
@@ -339,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(){
-
+        setLoginData("","","",false);
     }
 
     @Override
