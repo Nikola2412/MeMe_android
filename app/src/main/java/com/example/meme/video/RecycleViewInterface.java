@@ -1,4 +1,4 @@
-package com.example.meme.ui.video;
+package com.example.meme.video;
 
 public interface RecycleViewInterface {
     void onItemClick(int position);

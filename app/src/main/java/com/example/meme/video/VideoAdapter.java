@@ -1,4 +1,4 @@
-package com.example.meme.ui.video;
+package com.example.meme.video;
 
 import android.content.Context;
 import android.view.LayoutInflater;

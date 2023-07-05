@@ -1,4 +1,4 @@
-package com.example.meme.ui.video;
+package com.example.meme.video;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -127,7 +127,7 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
                     String name = json_data.optString("name");
                     //String name = json_data.optString("name");
                     Videos video = new Videos(ime,
-                            ip + "thubnails/" + id + ".jpg", ip + "android_id_videa=" + id, name);
+                            ip + "thubnails/" + id + ".jpg", ip + "id_videa=" + id, name);
                     videos.add(video);
                 }
                 md.notifyDataSetChanged();

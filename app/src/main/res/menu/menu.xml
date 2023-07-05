@@ -35,15 +35,4 @@
         android:title="Setting"
         />
 
-    <item android:id="@+id/file"
-        android:title="asdasdasd" >
-        <!-- "file" submenu -->
-        <menu>
-            <item android:id="@+id/create_new"
-                android:title="dasdasd" />
-            <item android:id="@+id/open"
-                android:title="en" />
-        </menu>
-    </item>
-
 </menu>
