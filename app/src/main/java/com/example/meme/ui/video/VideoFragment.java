@@ -1,4 +1,4 @@
-package com.example.meme.ui.home;
+package com.example.meme.ui.video;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements RecycleViewInterface{
+public class VideoFragment extends Fragment implements RecycleViewInterface{
 
     RecycleViewInterface recycleViewInterface;
     private FragmentHomeBinding binding;

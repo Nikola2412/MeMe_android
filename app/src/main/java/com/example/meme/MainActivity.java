@@ -2,26 +2,18 @@ package com.example.meme;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -111,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        navController.enableOnBackPressed(true);
 
 
         mainLayout = findViewById(R.id.container);
@@ -296,8 +289,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login_function() {
+        navController.navigate(R.id.loginFragment);
+
+
+        /*
         String url = "android_auth";
         String ip = getString(R.string.ip);
+
         Dialog dialog = new Dialog(this,R.style.Dialog);
         dialog.setContentView(R.layout.login);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -337,6 +335,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+
+         */
     }
 
     public void logout(){
@@ -380,6 +380,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         String name = item.getTitle().toString();
+        if (item.getItemId() == android.R.id.home) {
+            navController.navigateUp();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
     public void toast(int k)
