@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -78,9 +77,9 @@ public class MemesFragment extends Fragment implements MemesInterface {
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     if (scroll_down) {
-                        ((MainActivity)getActivity()).actionBar.hide();
+                        //((MainActivity)getActivity()).actionBar.hide();
                     } else {
-                        ((MainActivity)getActivity()).actionBar.show();
+                        //((MainActivity)getActivity()).actionBar.show();
                     }
                 }
 

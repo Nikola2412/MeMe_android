@@ -1,18 +1,12 @@
 package com.example.meme.ui.home;
 
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
-import com.example.meme.MyAdapter;
 import com.example.meme.R;
 import com.example.meme.Videos;
 import com.example.meme.databinding.FragmentHomeBinding;
@@ -42,7 +35,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
     private RecyclerView rv;
 
     View view;
-    MyAdapter md;
+    VideoAdapter md;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +62,7 @@ public class HomeFragment extends Fragment implements RecycleViewInterface{
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
-            md = new MyAdapter(getContext(), videos, recycleViewInterface);
+            md = new VideoAdapter(getContext(), videos, recycleViewInterface);
             rv.setAdapter(md);
             md.notifyDataSetChanged();
             callApi();
