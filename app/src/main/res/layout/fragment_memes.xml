@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemesFragment">
-
+    tools:context=".MemesFragment"
+    >
     <ImageView
         android:id="@+id/noNet"
         android:layout_width="match_parent"
@@ -16,6 +16,5 @@
         android:id="@+id/memes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/app_name"
-        tools:listitem="@layout/meme" />
+        android:contentDescription="@string/app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>
