@@ -25,6 +25,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
@@ -107,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         navController.enableOnBackPressed(true);
 
+
+        AppCompatDelegate
+                .setDefaultNightMode(
+                        AppCompatDelegate
+                                .MODE_NIGHT_YES);
 
         mainLayout = findViewById(R.id.container);
         PlayerContainer = findViewById(R.id.PlayerContainer);
