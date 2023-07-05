@@ -3,6 +3,7 @@ package com.example.meme;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -289,10 +291,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login_function() {
-        navController.navigate(R.id.loginFragment);
+        //navController.navigate(R.id.loginFragment);
 
-
-        /*
         String url = "android_auth";
         String ip = getString(R.string.ip);
 
@@ -335,8 +335,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.show();
-
-         */
     }
 
     public void logout(){
