@@ -1,4 +1,4 @@
-package com.example.meme;
+package com.example.meme.memes;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -21,6 +21,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.meme.MainActivity;
+import com.example.meme.Meme;
+import com.example.meme.R;
 import com.example.meme.databinding.FragmentMemesBinding;
 
 import org.json.JSONArray;

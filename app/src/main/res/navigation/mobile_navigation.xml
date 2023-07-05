@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_upload"
-        android:name="com.example.meme.FragmentUpload"
+        android:name="com.example.meme.uplaod.FragmentUpload"
         android:label="@string/app_name"
         />
 
     <fragment
         android:id="@+id/navigation_meme"
-        android:name="com.example.meme.MemesFragment"
+        android:name="com.example.meme.memes.MemesFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_memes"
         />

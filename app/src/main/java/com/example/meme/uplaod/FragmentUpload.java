@@ -1,4 +1,4 @@
-package com.example.meme;
+package com.example.meme.uplaod;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -16,6 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.meme.MainActivity;
+import com.example.meme.R;
+import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
 
 import java.util.ArrayList;

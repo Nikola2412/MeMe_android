@@ -1,4 +1,4 @@
-package com.example.meme;
+package com.example.meme.memes;
 
 import android.widget.ImageView;
 
