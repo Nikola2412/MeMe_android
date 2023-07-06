@@ -297,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login_function() {
-        //navController.navigate(R.id.loginFragment);
-
+        navController.navigate(R.id.loginFragment);
+        /*
         String url = "android_auth";
         String ip = getString(R.string.ip);
 
@@ -341,6 +341,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+
+         */
     }
 
     public void logout(){
