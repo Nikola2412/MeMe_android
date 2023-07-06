@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import com.example.meme.MainActivity;
 import com.example.meme.R;
 import com.example.meme.Videos;
 import com.example.meme.databinding.FragmentHomeBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -150,6 +152,7 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
         //((MainActivity)getActivity()).toast(videos.get(position).link);
         ((MainActivity) getActivity()).setVideo(videos.get(position).link);
     }
+
 
     @Override
     public void onLink(int position) {

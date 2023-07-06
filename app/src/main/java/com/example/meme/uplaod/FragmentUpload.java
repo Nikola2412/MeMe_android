@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import com.example.meme.MainActivity;
 import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -84,6 +86,10 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         recyclerView.setAdapter(umd);
         umd.notifyDataSetChanged();
 
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recyclerView);
+
+
     }
     private void openFileExplorer() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -106,7 +112,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                 Uri fileUri = data.getData();
                 if (fileUri != null) {
                     UploadMeme meme = new UploadMeme(fileUri);
-                    memes.add(meme);
+                    memes.add(0,meme);
                     umd.notifyDataSetChanged();
                 }
             }
@@ -120,6 +126,26 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
     }
     @Override
     public void onItemClick(int position) {
-        ((MainActivity)getActivity()).toast(position);
+        //((MainActivity)getActivity()).toast(position);
     }
+    ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            //Snackbar snackbar = Snackbar.make(R.id.uplaod,"Item Deleted",Snackbar.LENGTH_LONG);
+            //snackbar.show();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            memes.remove(viewHolder.getAdapterPosition());
+            umd.notifyDataSetChanged();
+
+        }
+    };
 }

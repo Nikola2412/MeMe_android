@@ -44,8 +44,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.example.meme.data.model.LoggedInUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private ActivityMainBinding binding;
     public String username = "",password = "";
     public String id_user="";
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private float dX, dY;
     private int W,H;
     private boolean isExpanded = false;
+
 
     public void setLoginData(String user,String password,String id_user,Boolean logged){
         this.username = user;
@@ -297,8 +299,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login_function() {
-        navController.navigate(R.id.loginFragment);
-        /*
+        //navController.navigate(R.id.loginFragment);
+
         String url = "android_auth";
         String ip = getString(R.string.ip);
 
@@ -342,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.show();
 
-         */
+         
     }
 
     public void logout(){

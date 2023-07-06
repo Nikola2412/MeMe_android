@@ -1,5 +1,8 @@
 package com.example.meme.data;
 
+import android.widget.Toast;
+
+import com.example.meme.MainActivity;
 import com.example.meme.data.model.LoggedInUser;
 
 /**
