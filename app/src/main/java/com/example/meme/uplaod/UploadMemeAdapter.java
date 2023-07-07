@@ -1,8 +1,15 @@
 package com.example.meme.uplaod;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.meme.Meme;
 import com.example.meme.R;
 import com.example.meme.UploadMeme;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.MyViewHolder> {
@@ -53,11 +66,10 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView meme;
         View view;
+        Uri path;
         public void setMeme(Uri path) {
-            //Toast.makeText(context,path, Toast.LENGTH_LONG).show();
-            //Glide.with(context).load(new File(path)).into(meme);
-            //Glide.with(context).load("http://192.168.1.4:3001/id_memea="+"ef7341c8-379c-4bc8-87e4-79d573cd64a7").into(meme);
             meme.setImageURI(path);
+            this.path = path;
         }
         public MyViewHolder(@NonNull View itemView, UploadMemeInterface uploadMemeInterface) {
             super(itemView);
@@ -82,33 +94,40 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     //Toast.makeText(context,Integer.toString(getAdapterPosition()), Toast.LENGTH_LONG).show();
                     Dialog dialog = new Dialog(context,R.style.Dialog);
                     dialog.setContentView(R.layout.delete_dialog);
-                    ImageView img  = dialog.findViewById(R.id.preview_meme);
-                    img.setImageDrawable(meme.getDrawable());
+                    CropImageView img  = dialog.findViewById(R.id.preview_meme);
+                    //img.setImageDrawable(meme.getDrawable());
+                    img.setImageUriAsync(path);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(300);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                             memes.remove(getAdapterPosition());
+                            uploadMemeInterface.onSizeChange();
                             notifyItemRemoved(getAdapterPosition());
                         }
                     });
-                    dialog.findViewById(R.id.edit_meme).setOnClickListener(new View.OnClickListener() {
+                    dialog.findViewById(R.id.save_meme).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             dialog.dismiss();
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(300);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            Toast.makeText(context,"Jos je u izdardi",Toast.LENGTH_LONG).show();
+                            //Bitmap cropped = img.getCroppedImage();
+                            //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                            ///cropped.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                            ///String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),cropped, "Title", null);
+                            //setMeme(Uri.parse(path));
+                            meme.setImageDrawable(new BitmapDrawable(img.getCroppedImage()));
+                            //notifyItemChanged(getAdapterPosition());
                         }
                     });
                     dialog.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {

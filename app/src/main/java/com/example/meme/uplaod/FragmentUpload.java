@@ -3,12 +3,14 @@ package com.example.meme.uplaod;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +19,23 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
 import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
-import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -36,6 +49,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
     View view;
     private RecyclerView recyclerView;
     UploadMemeAdapter umd;
+    Button upload;
 
 
     @Override
@@ -56,6 +70,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         uploadMemeInterface = this;
         this.view = view;
         ((MainActivity)getActivity()).actionBar.show();
+        upload = view.findViewById(R.id.upload_meme);
 
         view.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,11 +86,34 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         view.findViewById(R.id.upload_meme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((MainActivity)getActivity()).logged){
-                    ((MainActivity)getActivity()).toast("Jos je u izradi");
-                }
-                else {
-                    ((MainActivity)getActivity()).login_function();
+                if(memes.size()>0){
+                    Uri uri = memes.get(0).Path;
+                    try {
+                        byte[] bytes = convertImageToByteArray(uri,getContext());
+
+                        String url = "upload_android";
+                        String ip = "http://192.168.1.6:3001/";
+
+                        JSONObject data = new JSONObject();
+                        data.put("meme",bytes);
+                        data.put("id_kanala",((MainActivity)getActivity()).id_user);
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ip + url, data, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        requestQueue.add(request);
+
+                    } catch (IOException | JSONException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 }
             }
@@ -113,12 +151,15 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                 if (fileUri != null) {
                     UploadMeme meme = new UploadMeme(fileUri);
                     memes.add(0,meme);
-                    umd.notifyDataSetChanged();
+                    umd.notifyItemInserted(0);
+                    changeButton();
                 }
             }
         }
     }
-
+    public void changeButton(){
+        upload.setEnabled(memes.size()>0);
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -128,6 +169,12 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
     public void onItemClick(int position) {
         //((MainActivity)getActivity()).toast(position);
     }
+    @Override
+    public void onSizeChange() {
+        //((MainActivity)getActivity()).toast("dasdasd");
+        changeButton();
+    }
+
     ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -138,14 +185,25 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             //Snackbar snackbar = Snackbar.make(R.id.uplaod,"Item Deleted",Snackbar.LENGTH_LONG);
             //snackbar.show();
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             memes.remove(viewHolder.getAdapterPosition());
-            umd.notifyDataSetChanged();
-
+            umd.notifyItemRemoved(viewHolder.getAdapterPosition());;
+            changeButton();
         }
     };
+    public static byte[] convertImageToByteArray(Uri imageUri, Context context) throws IOException {
+        InputStream inputStream = context.getContentResolver().openInputStream(imageUri);
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byteStream.write(buffer, 0, bytesRead);
+        }
+
+        byte[] byteArray = byteStream.toByteArray();
+        inputStream.close();
+        byteStream.close();
+
+        return byteArray;
+    }
 }

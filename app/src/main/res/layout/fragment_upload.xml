@@ -47,6 +47,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        android:enabled="false"
         android:drawableLeft="@drawable/baseline_file_upload_24"
         />
 
