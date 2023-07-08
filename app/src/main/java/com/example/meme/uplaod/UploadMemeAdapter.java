@@ -3,9 +3,11 @@ package com.example.meme.uplaod;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -94,20 +97,29 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     //Toast.makeText(context,Integer.toString(getAdapterPosition()), Toast.LENGTH_LONG).show();
                     Dialog dialog = new Dialog(context,R.style.Dialog);
                     dialog.setContentView(R.layout.delete_dialog);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    dialog.show();
                     CropImageView img  = dialog.findViewById(R.id.preview_meme);
                     //img.setImageDrawable(meme.getDrawable());
                     img.setImageUriAsync(path);
-                    Rect initialCropRect = new Rect(0, 0, meme.getRight(), meme.getBottom());
-                    img.setCropRect(initialCropRect);
                     img.onSaveInstanceState();
-                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    Button save = dialog.findViewById(R.id.save_meme);
+
+                    //Nmp kako drugacije
+                    img.setCropRect(new Rect(0,0,1000000000,1000000000));
+
                     img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
                         @Override
                         public void onCropOverlayMoved(Rect rect) {
-                            if (initialCropRect != rect)
-                                dialog.findViewById(R.id.save_meme).setEnabled(true);
-                            else
-                                dialog.findViewById(R.id.save_meme).setEnabled(false);
+                            save.setEnabled(true);
+                        }
+                    });
+                    img.setOnSetCropOverlayReleasedListener(new CropImageView.OnSetCropOverlayReleasedListener() {
+                        @Override
+                        public void onCropOverlayReleased(Rect rect) {
+                            if(rect.top==img.getWholeImageRect().top && rect.right == img.getWholeImageRect().right
+                                    && rect.bottom == img.getWholeImageRect().bottom && rect.left==img.getWholeImageRect().left)
+                                save.setEnabled(false);
                         }
                     });
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
@@ -124,7 +136,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             notifyItemRemoved(getAdapterPosition());
                         }
                     });
-                    dialog.findViewById(R.id.save_meme).setOnClickListener(new View.OnClickListener() {
+                    save.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
@@ -142,7 +154,6 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             dialog.dismiss();
                         }
                     });
-                    dialog.show();
                     return true;
                 }
             });
