@@ -97,7 +97,19 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     CropImageView img  = dialog.findViewById(R.id.preview_meme);
                     //img.setImageDrawable(meme.getDrawable());
                     img.setImageUriAsync(path);
+                    Rect initialCropRect = new Rect(0, 0, meme.getRight(), meme.getBottom());
+                    img.setCropRect(initialCropRect);
+                    img.onSaveInstanceState();
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
+                        @Override
+                        public void onCropOverlayMoved(Rect rect) {
+                            if (initialCropRect != rect)
+                                dialog.findViewById(R.id.save_meme).setEnabled(true);
+                            else
+                                dialog.findViewById(R.id.save_meme).setEnabled(false);
+                        }
+                    });
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -121,13 +133,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            //Bitmap cropped = img.getCroppedImage();
-                            //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                            ///cropped.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                            ///String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),cropped, "Title", null);
-                            //setMeme(Uri.parse(path));
                             meme.setImageDrawable(new BitmapDrawable(img.getCroppedImage()));
-                            //notifyItemChanged(getAdapterPosition());
                         }
                     });
                     dialog.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {
