@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity{
                                     .start();
                             PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
                         }
-
+                        /*
                         if (PlayerContainer.getY()>mainLayout.getHeight()/3){
                             PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,videoView.getHeight()));
                         }
@@ -168,10 +168,7 @@ public class MainActivity extends AppCompatActivity{
                             PlayerContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
                         }
 
-                        if (dY>0){
-                            toast("dole");
-                        }
-
+                         */
                         break;
                     case MotionEvent.ACTION_UP:
                         // Provera da li je mini plejer prevučen dovoljno visoko za proširivanje
@@ -466,5 +463,11 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 }
