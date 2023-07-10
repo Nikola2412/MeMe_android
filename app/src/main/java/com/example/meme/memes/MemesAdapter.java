@@ -53,7 +53,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
 
         public void setMeme(String path) {
             meme = view.findViewById(R.id.mim);
-            Glide.with(context).load(path).into(meme);
+            Glide.with(context).load(path).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(meme);
         }
 
         public MemeViewHolder(@NonNull View itemView, MemesInterface recycleViewInterface) {
