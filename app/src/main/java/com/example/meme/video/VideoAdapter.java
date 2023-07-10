@@ -24,6 +24,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
     static Context context;
     ArrayList<Videos> videosArrayList;
 
+    public void setVideosArrayList(ArrayList<Videos> videosArrayList) {
+        this.videosArrayList = videosArrayList;
+    }
+
     public VideoAdapter(Context context, ArrayList<Videos> videos, RecycleViewInterface recycleViewInterface){
         this.context = context;
         this.videosArrayList = videos;

@@ -39,6 +39,10 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
 
     static Context context;
 
+    public void setMemes(ArrayList<UploadMeme> memes) {
+        this.memes = memes;
+    }
+
     String ip;
     ArrayList<UploadMeme>memes;
 
@@ -111,15 +115,17 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
                         @Override
                         public void onCropOverlayMoved(Rect rect) {
-                            save.setEnabled(true);
+                            //save.setEnabled(true);
                         }
                     });
                     img.setOnSetCropOverlayReleasedListener(new CropImageView.OnSetCropOverlayReleasedListener() {
                         @Override
                         public void onCropOverlayReleased(Rect rect) {
+                            /*
                             if(rect.top==img.getWholeImageRect().top && rect.right == img.getWholeImageRect().right
                                     && rect.bottom == img.getWholeImageRect().bottom && rect.left==img.getWholeImageRect().left)
                                 save.setEnabled(false);
+                             */
                         }
                     });
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {

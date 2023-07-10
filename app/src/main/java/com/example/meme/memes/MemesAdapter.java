@@ -22,6 +22,10 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
     static Context context;
     ArrayList<Meme> memeArrayList;
 
+    public void setMemeArrayList(ArrayList<Meme> memeArrayList) {
+        this.memeArrayList = memeArrayList;
+    }
+
     public MemesAdapter(Context context, ArrayList<Meme> memes, MemesInterface memesInterface){
         this.context = context;
         this.memeArrayList = memes;

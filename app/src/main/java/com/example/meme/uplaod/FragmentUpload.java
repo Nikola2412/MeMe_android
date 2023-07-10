@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ import com.example.meme.MainActivity;
 import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
+import com.example.meme.video.VideoAdapter;
+import com.example.meme.video.VideosRecyclerViewState;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,8 @@ import java.util.ArrayList;
 
 
 public class FragmentUpload extends Fragment implements UploadMemeInterface{
+
+    private UploadRecyclerViewState recyclerViewState;
 
     private FragmentUploadBinding binding;
     public ArrayList<UploadMeme>memes;
@@ -66,11 +71,25 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable("recycler_state");
+        }
         memes = new ArrayList<>();
         uploadMemeInterface = this;
         this.view = view;
         ((MainActivity)getActivity()).actionBar.show();
         upload = view.findViewById(R.id.upload_meme);
+        recyclerView = view.findViewById(R.id.lista_mimova);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        umd = new UploadMemeAdapter(getContext(),memes,uploadMemeInterface);
+        recyclerView.setAdapter(umd);
+        if(recyclerViewState != null){
+            memes = recyclerViewState.getMemes();
+            umd.setMemes(memes);
+        }
+        umd.notifyDataSetChanged();
+        changeButton();
+
 
         view.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +106,8 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
             @Override
             public void onClick(View v) {
                 if(memes.size()>0){
+                    //Toast.makeText(getContext(),String.valueOf(memes.size()),Toast.LENGTH_SHORT).show();
+                    /*
                     Uri uri = memes.get(0).Path;
                     try {
                         byte[] bytes = convertImageToByteArray(uri,getContext());
@@ -115,19 +136,12 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                         throw new RuntimeException(e);
                     }
 
+                     */
                 }
             }
         });
-        recyclerView = view.findViewById(R.id.lista_mimova);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        umd = new UploadMemeAdapter(getContext(), memes,uploadMemeInterface);
-        recyclerView.setAdapter(umd);
-        umd.notifyDataSetChanged();
-
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(recyclerView);
-
-
     }
     private void openFileExplorer() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -153,6 +167,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                     memes.add(0,meme);
                     umd.notifyItemInserted(0);
                     changeButton();
+                    recyclerViewState = new UploadRecyclerViewState(memes);
                 }
             }
         }
@@ -205,5 +220,11 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         byteStream.close();
 
         return byteArray;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recycler_state", recyclerViewState);
     }
 }

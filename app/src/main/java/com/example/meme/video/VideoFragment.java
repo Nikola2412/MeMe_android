@@ -59,6 +59,7 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
         if (savedInstanceState != null) {
             recyclerViewState = savedInstanceState.getParcelable("recycler_state");
         }
+        videos = new ArrayList<>();
         recycleViewInterface = this;
         rv = view.findViewById(R.id.videos);
         if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
@@ -66,14 +67,12 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            md = new VideoAdapter(getContext(), videos, recycleViewInterface);
+            rv.setAdapter(md);
             if (recyclerViewState != null) {
                 videos = recyclerViewState.getVideos();
-                md = new VideoAdapter(getContext(), videos, recycleViewInterface);
-                rv.setAdapter(md);
+                md.setVideosArrayList(videos);
             } else {
-                videos = new ArrayList<>();
-                md = new VideoAdapter(getContext(), videos, recycleViewInterface);
-                rv.setAdapter(md);
                 callApi();
             }
 

@@ -62,6 +62,7 @@ public class MemesFragment extends Fragment implements MemesInterface {
         if (savedInstanceState != null) {
             recyclerViewState = savedInstanceState.getParcelable("recycler_state");
         }
+        memes = new ArrayList<>();
         recycleViewInterface = this;
         rv = view.findViewById(R.id.memes);
         if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
@@ -69,14 +70,12 @@ public class MemesFragment extends Fragment implements MemesInterface {
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            md = new MemesAdapter(getContext(), memes, recycleViewInterface);
+            rv.setAdapter(md);
             if (recyclerViewState != null) {
                 memes = recyclerViewState.getMemes();
-                md = new MemesAdapter(getContext(), memes, recycleViewInterface);
-                rv.setAdapter(md);
+                md.setMemeArrayList(memes);
             } else {
-                memes = new ArrayList<>();
-                md = new MemesAdapter(getContext(), memes, recycleViewInterface);
-                rv.setAdapter(md);
                 callApi();
             }
 

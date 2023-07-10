@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/baseline_save_24"
         android:text="Save"
-        android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/cancle"

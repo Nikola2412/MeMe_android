@@ -11,23 +11,19 @@
 
     <Button
         android:id="@+id/add"
-        android:layout_width="match_parent"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="ADD"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:drawableLeft="@drawable/baseline_add_circle_outline_24"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lista_mimova"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="0dp"
         android:contentDescription="dnasidhaisd"
         app:layout_constraintBottom_toTopOf="@+id/upload_meme"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,14 +34,12 @@
 
     <Button
         android:id="@+id/upload_meme"
-        android:layout_width="match_parent"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="@string/title_upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:enabled="false"
         android:drawableLeft="@drawable/baseline_file_upload_24"
         />
