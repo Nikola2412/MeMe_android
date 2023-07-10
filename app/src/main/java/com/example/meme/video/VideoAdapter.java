@@ -55,6 +55,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder
 
         return videosArrayList.size();
     }
+
+
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView thubnaile;

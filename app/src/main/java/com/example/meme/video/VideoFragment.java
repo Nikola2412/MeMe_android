@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 public class VideoFragment extends Fragment implements RecycleViewInterface{
 
     RecycleViewInterface recycleViewInterface;
+    private VideosRecyclerViewState recyclerViewState;
+
     private FragmentHomeBinding binding;
     public ArrayList<Videos> videos;
     private RecyclerView rv;
@@ -54,7 +57,6 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //ActionBar actionBar = ((MainActivity)getActivity()).actionBar;
-        videos = new ArrayList<>();
         recycleViewInterface = this;
         this.view = view;
         rv = view.findViewById(R.id.videos);
@@ -64,11 +66,17 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
-            md = new VideoAdapter(getContext(), videos, recycleViewInterface);
-            rv.setAdapter(md);
+            if (recyclerViewState != null) {
+                videos = recyclerViewState.getItems();
+                md = new VideoAdapter(getContext(), videos, recycleViewInterface);
+                rv.setAdapter(md);
+            } else {
+                videos = new ArrayList<>();
+                md = new VideoAdapter(getContext(), videos, recycleViewInterface);
+                rv.setAdapter(md);
+                callApi();
+            }
             md.notifyDataSetChanged();
-            callApi();
-
 
             rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -114,6 +122,7 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
 
         String url = "videos";
         String ip = getString(R.string.ip);
+        //Toast.makeText(getContext(),"dasdasdasd",Toast.LENGTH_SHORT).show();
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -131,9 +140,11 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
                     Videos video = new Videos(ime,
                             ip + "thubnails/" + id + ".jpg", ip + "id_videa=" + id, name);
                     videos.add(video);
+                    md.notifyItemInserted(videos.size() - 1);
                 }
                 md.notifyDataSetChanged();
-
+                recyclerViewState = new VideosRecyclerViewState(videos);
+                //Toast.makeText(getContext(),String.valueOf(videos.size()),Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -159,5 +170,17 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
         ((MainActivity) getActivity()).toast(videos.get(position).kanal);
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recycler_state", recyclerViewState);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable("recycler_state");
+        }
+    }
 }
