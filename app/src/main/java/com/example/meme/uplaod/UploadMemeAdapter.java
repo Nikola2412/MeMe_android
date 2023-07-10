@@ -51,7 +51,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
     @NonNull
     @Override
     public UploadMemeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.meme,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.upload_meme,parent,false);
         return new UploadMemeAdapter.MyViewHolder(v,uploadMemeInterface);
     }
 
