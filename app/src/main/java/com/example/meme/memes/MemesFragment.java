@@ -127,7 +127,7 @@ public class MemesFragment extends Fragment implements MemesInterface {
                     String id = json_data.optString("id");
                     int id_kanala = json_data.optInt("id_kanala");
                     String naziv_kanala = json_data.optString("name");
-                    Meme meme = new Meme(ip + "id_memea=" + id,id_kanala,naziv_kanala);
+                    Meme meme = new Meme(id,id_kanala,naziv_kanala);
                     memes.add(meme);
                 }
                 md.notifyDataSetChanged();

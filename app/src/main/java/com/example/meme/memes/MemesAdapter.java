@@ -1,6 +1,7 @@
 package com.example.meme.memes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,14 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
         ImageView meme;
         View view;
 
+        String path;
+
+        String ip = context.getString(R.string.ip);
+
         public void setMeme(String path) {
+            this.path = path;
             meme = view.findViewById(R.id.mim);
-            Glide.with(context).load(path).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(meme);
+            Glide.with(context).load(ip + "id_memea=" + path).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(meme);
         }
 
         public MemeViewHolder(@NonNull View itemView, MemesInterface recycleViewInterface) {
@@ -76,6 +82,20 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
                     }
                 }
 
+            }); 
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT,ip + "/see?meme=" +  path);
+
+                    if(intent.resolveActivity(context.getPackageManager())!=null){
+                        context.startActivity(intent);
+                    }
+                    return true;
+                }
             });
 
         }
