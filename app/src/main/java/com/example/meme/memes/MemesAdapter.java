@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.meme.Meme;
 import com.example.meme.R;
 
@@ -50,9 +51,9 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
         ImageView meme;
         View view;
 
-        public void setMeme(String id) {
+        public void setMeme(String path) {
             meme = view.findViewById(R.id.mim);
-            Glide.with(context).load(id).into(meme);
+            Glide.with(context).load(path).into(meme);
         }
 
         public MemeViewHolder(@NonNull View itemView, MemesInterface recycleViewInterface) {

@@ -10,7 +10,7 @@ import com.example.meme.Videos;
 import java.util.ArrayList;
 
 public class VideosRecyclerViewState implements Parcelable {
-    public ArrayList<Videos> videos;
+    private ArrayList<Videos> videos;
 
     public VideosRecyclerViewState(ArrayList<Videos> videos) {
         this.videos = videos;
@@ -18,6 +18,9 @@ public class VideosRecyclerViewState implements Parcelable {
 
     public Videos returnVideo(int pos){
         return videos.get(pos);
+    }
+    public ArrayList<Videos> getVideos() {
+        return videos;
     }
 
     protected VideosRecyclerViewState(Parcel in) {
@@ -44,9 +47,5 @@ public class VideosRecyclerViewState implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-    }
-
-    public ArrayList<Videos> getItems() {
-        return videos;
     }
 }

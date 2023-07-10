@@ -2,8 +2,6 @@ package com.example.meme;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 

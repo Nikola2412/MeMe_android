@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 public class MemesFragment extends Fragment implements MemesInterface {
 
     MemesInterface recycleViewInterface;
+    private MemesRecyclerViewState recyclerViewState;
+
     private FragmentMemesBinding binding;
 
     public ArrayList<Meme> memes;
@@ -43,37 +46,39 @@ public class MemesFragment extends Fragment implements MemesInterface {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.fade));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMemesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         return root;
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_memes, container, false);
     }
     static boolean scroll_down;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        memes = new ArrayList<>();
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable("recycler_state");
+        }
         recycleViewInterface = this;
         rv = view.findViewById(R.id.memes);
         if (((MainActivity)getActivity()).isInternetAvailable(getContext())) {
             // Pristup internetu je dostupan
             view.findViewById(R.id.noNet).setVisibility(View.GONE);
-            rv.setLayoutManager(new LinearLayoutManager(getContext()));
             rv.setVisibility(View.VISIBLE);
-            md = new MemesAdapter(getContext(),memes, recycleViewInterface);
-            rv.setAdapter(md);
-            md.notifyDataSetChanged();
-            callApi();
+            rv.setLayoutManager(new LinearLayoutManager(getContext()));
+            if (recyclerViewState != null) {
+                memes = recyclerViewState.getMemes();
+                md = new MemesAdapter(getContext(), memes, recycleViewInterface);
+                rv.setAdapter(md);
+            } else {
+                memes = new ArrayList<>();
+                md = new MemesAdapter(getContext(), memes, recycleViewInterface);
+                rv.setAdapter(md);
+                callApi();
+            }
 
             rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -96,7 +101,6 @@ public class MemesFragment extends Fragment implements MemesInterface {
                     }
                 }
             });
-
         } else {
             // Pristup internetu nije dostupan
             rv.setVisibility(View.INVISIBLE);
@@ -107,7 +111,7 @@ public class MemesFragment extends Fragment implements MemesInterface {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding=null;
+        binding = null;
         ((MainActivity)getActivity()).actionBar.show();
 
     }
@@ -128,7 +132,7 @@ public class MemesFragment extends Fragment implements MemesInterface {
                     memes.add(meme);
                 }
                 md.notifyDataSetChanged();
-
+                recyclerViewState = new MemesRecyclerViewState(memes);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -170,5 +174,11 @@ public class MemesFragment extends Fragment implements MemesInterface {
         });
         dialog.show();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recycler_state", recyclerViewState);
     }
 }
