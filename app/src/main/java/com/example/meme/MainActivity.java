@@ -44,7 +44,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.example.meme.data.model.LoggedInUser;
 
 public class MainActivity extends AppCompatActivity{
     private ActivityMainBinding binding;
