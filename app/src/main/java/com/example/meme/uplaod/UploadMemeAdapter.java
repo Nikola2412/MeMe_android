@@ -2,9 +2,7 @@ package com.example.meme.uplaod;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -12,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,10 +19,6 @@ import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.MyViewHolder> {
@@ -32,12 +27,14 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
 
     static Context context;
 
+    String ip;
+    ArrayList<UploadMeme>memes;
+
     public void setMemes(ArrayList<UploadMeme> memes) {
         this.memes = memes;
     }
 
-    String ip;
-    ArrayList<UploadMeme>memes;
+
 
     public UploadMemeAdapter(Context context,ArrayList<UploadMeme> memes,UploadMemeInterface uploadMemeInterface) {
         this.memes = memes;
@@ -66,6 +63,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView meme;
         View view;
+        //Rect edit_react = new Rect(0, 0, 0, 0);
         public void setMeme(Uri path) {
             meme.setImageURI(path);
         }
@@ -93,6 +91,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     dialog.setContentView(R.layout.delete_dialog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     dialog.show();
+                    Toast.makeText(context,"Editing has bugs so i am working on it",Toast.LENGTH_SHORT).show();
                     CropImageView img  = dialog.findViewById(R.id.preview_meme);
                     //img.setImageDrawable(meme.getDrawable());
                     img.setImageUriAsync(memes.get(getAdapterPosition()).getOrg());
@@ -102,7 +101,8 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     revert.setEnabled(memes.get(getAdapterPosition()).Edited());
 
                     //Nmp kako drugacije
-                    img.setCropRect(new Rect(0,0,1000000000,1000000000));
+                    //img.setCropRect(edit_react);
+                    //Toast.makeText(context,String.valueOf(edit_react),Toast.LENGTH_SHORT).show();
 
                     img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
                         @Override

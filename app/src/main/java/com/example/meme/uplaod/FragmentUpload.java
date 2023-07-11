@@ -126,8 +126,8 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                     UploadMeme meme = new UploadMeme(fileUri);
                     memes.add(0,meme);
                     umd.notifyItemInserted(0);
+                    recyclerView.scrollToPosition(0);
                     changeButton();
-                    recyclerView.smoothScrollToPosition(0);
                 }
             }
         }
