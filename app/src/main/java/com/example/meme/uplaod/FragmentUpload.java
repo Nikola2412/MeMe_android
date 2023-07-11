@@ -27,11 +27,6 @@ import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
 
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -101,7 +96,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
             @Override
             public void onClick(View v) {
                 for(int i = 0; i< memes.size();i++){
-
+                    //https://www.youtube.com/watch?v=YMUGyIjV8Yw&ab_channel=CodesEasy
                 }
             }
         });
