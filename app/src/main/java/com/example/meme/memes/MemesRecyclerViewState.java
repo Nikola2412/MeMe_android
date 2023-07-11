@@ -20,6 +20,10 @@ public class MemesRecyclerViewState implements Parcelable {
         return memes.get(pos);
     }
 
+    public void addMeme(Meme meme) {
+        this.memes.add(meme);
+    }
+
     public ArrayList<Meme> getMemes() {
         return memes;
     }

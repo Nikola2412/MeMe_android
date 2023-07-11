@@ -1,5 +1,6 @@
 package com.example.meme.memes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ShareCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -77,7 +79,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
                         if(pos != RecyclerView.NO_POSITION)
                         {
                             //recycleViewInterface.onItemClick(pos);
-                            recycleViewInterface.openImageFullscreen(meme,pos);
+                            recycleViewInterface.openImageFullscreen(ip + "id_memea=" + path,pos);
                         }
                     }
                 }
@@ -86,10 +88,12 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.MemeViewHold
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT,ip + "/see?meme=" +  path);
+
+                    Intent intent = ShareCompat.IntentBuilder.from((Activity) context)
+                            .setType("text/plain")
+                            .setChooserTitle("Share Link")
+                            .setText(ip + "/see?meme=" +  path)
+                            .getIntent();
 
                     if(intent.resolveActivity(context.getPackageManager())!=null){
                         context.startActivity(intent);

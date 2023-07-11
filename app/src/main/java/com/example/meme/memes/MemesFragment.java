@@ -16,18 +16,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.meme.MainActivity;
 import com.example.meme.Meme;
 import com.example.meme.R;
 import com.example.meme.databinding.FragmentMemesBinding;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -42,6 +48,7 @@ public class MemesFragment extends Fragment implements MemesInterface {
     public ArrayList<Meme> memes;
     private RecyclerView rv;
     MemesAdapter md;
+    private boolean isBackendCalled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,10 @@ public class MemesFragment extends Fragment implements MemesInterface {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
+                    if (!recyclerView.canScrollVertically(1) && md.getItemCount()>0 && !isBackendCalled) {
+                        isBackendCalled = true;
+                        moreMemes();
+                    }
                     if (scroll_down) {
                         //((MainActivity)getActivity()).actionBar.hide();
                     } else {
@@ -105,6 +116,35 @@ public class MemesFragment extends Fragment implements MemesInterface {
             rv.setVisibility(View.INVISIBLE);
             view.findViewById(R.id.noNet).setVisibility(View.VISIBLE);
         }
+    }
+
+    private void moreMemes() {
+        String url = "more_memes?n=";
+        String ip = getString(R.string.ip);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ip + url + md.getItemCount(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for(int i = 0; i<response.length(); i++){
+                    JSONObject json_data = response.optJSONObject(i);
+                    String id = json_data.optString("id");
+                    int id_kanala = json_data.optInt("id_kanala");
+                    String naziv_kanala = json_data.optString("name");
+                    Meme meme = new Meme(id,id_kanala,naziv_kanala);
+                    memes.add(meme);
+                    md.notifyItemInserted(memes.size() - 1);
+                }
+                isBackendCalled = false;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(((MainActivity)getActivity()).getApplicationContext());
+        requestQueue.add(request);
     }
 
     @Override
@@ -150,13 +190,13 @@ public class MemesFragment extends Fragment implements MemesInterface {
     }
 
     @Override
-    public void openImageFullscreen(ImageView imageView, int pos) {
+    public void openImageFullscreen(String path,int pos) {
         Dialog dialog = new Dialog(getContext(),R.style.Dialog);
         //Dialog dialog = new Dialog(getContext(),R.style.Theme_AppCompat_Dark_NoActionBar_FullScreen);
         dialog.setContentView(R.layout.image_dialog);
         ImageView fullscreenImageView = dialog.findViewById(R.id.view_meme);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        fullscreenImageView.setImageDrawable(imageView.getDrawable());
+        Glide.with(getContext()).load(path).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(fullscreenImageView);
         TextView tv = dialog.findViewById(R.id.naziv_kanala);
         tv.setText(memes.get(pos).naziv_kanala);
 
