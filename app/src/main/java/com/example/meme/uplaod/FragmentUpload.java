@@ -5,8 +5,10 @@ import static android.app.Activity.RESULT_OK;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +22,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.meme.MainActivity;
 import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.example.meme.databinding.FragmentUploadBinding;
-import com.example.meme.video.VideoAdapter;
-import com.example.meme.video.VideosRecyclerViewState;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +80,9 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
             memes = recyclerViewState.getMemes();
             umd.setMemes(memes);
         }
-        umd.notifyDataSetChanged();
+        else {
+            recyclerViewState = new UploadRecyclerViewState(memes);
+        }
         changeButton();
 
 
@@ -105,38 +100,8 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
         view.findViewById(R.id.upload_meme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(memes.size()>0){
-                    //Toast.makeText(getContext(),String.valueOf(memes.size()),Toast.LENGTH_SHORT).show();
-                    /*
-                    Uri uri = memes.get(0).Path;
-                    try {
-                        byte[] bytes = convertImageToByteArray(uri,getContext());
+                for(int i = 0; i< memes.size();i++){
 
-                        String url = "upload_android";
-                        String ip = "http://192.168.1.6:3001/";
-
-                        JSONObject data = new JSONObject();
-                        data.put("meme",bytes);
-                        data.put("id_kanala",((MainActivity)getActivity()).id_user);
-                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ip + url, data, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        });
-                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-                        requestQueue.add(request);
-
-                    } catch (IOException | JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                     */
                 }
             }
         });
@@ -167,7 +132,7 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
                     memes.add(0,meme);
                     umd.notifyItemInserted(0);
                     changeButton();
-                    recyclerViewState = new UploadRecyclerViewState(memes);
+                    recyclerView.smoothScrollToPosition(0);
                 }
             }
         }
@@ -182,11 +147,9 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
     }
     @Override
     public void onItemClick(int position) {
-        //((MainActivity)getActivity()).toast(position);
     }
     @Override
     public void onSizeChange() {
-        //((MainActivity)getActivity()).toast("dasdasd");
         changeButton();
     }
 
@@ -198,29 +161,11 @@ public class FragmentUpload extends Fragment implements UploadMemeInterface{
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            //Snackbar snackbar = Snackbar.make(R.id.uplaod,"Item Deleted",Snackbar.LENGTH_LONG);
-            //snackbar.show();
             memes.remove(viewHolder.getAdapterPosition());
             umd.notifyItemRemoved(viewHolder.getAdapterPosition());;
             changeButton();
         }
     };
-    public static byte[] convertImageToByteArray(Uri imageUri, Context context) throws IOException {
-        InputStream inputStream = context.getContentResolver().openInputStream(imageUri);
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[8192];
-        int bytesRead;
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            byteStream.write(buffer, 0, bytesRead);
-        }
-
-        byte[] byteArray = byteStream.toByteArray();
-        inputStream.close();
-        byteStream.close();
-
-        return byteArray;
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
