@@ -53,6 +53,7 @@ public class UploadMeme implements Parcelable {
     protected UploadMeme(Parcel in) {
         Path = in.readParcelable(Uri.class.getClassLoader());
         org = in.readParcelable(Uri.class.getClassLoader());
+        rect = in.readParcelable(Rect.class.getClassLoader());
     }
 
     public static final Creator<UploadMeme> CREATOR = new Creator<UploadMeme>() {
@@ -76,5 +77,6 @@ public class UploadMeme implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeParcelable(Path, flags);
         dest.writeParcelable(org,flags);
+        dest.writeParcelable(rect,flags);
     }
 }

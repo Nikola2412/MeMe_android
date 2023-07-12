@@ -2,8 +2,12 @@ package com.example.meme.uplaod;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +97,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     dialog.setContentView(R.layout.delete_dialog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     dialog.show();
-                    Toast.makeText(context,"Editing has bugs so i am working on it",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"Editing has bugs so i am working on it",Toast.LENGTH_SHORT).show();
                     CropImageView img  = dialog.findViewById(R.id.preview_meme);
                     //img.setImageDrawable(meme.getDrawable());
                     img.setImageUriAsync(meme.getOrg());
@@ -144,6 +148,9 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            if(meme.Edited()){
+                                Toast.makeText(context,"Delete",Toast.LENGTH_SHORT).show();
+                            }
                             String url = MediaStore.Images.Media.insertImage(context.getContentResolver(), img.getCroppedImage(), "Edited", "");
                             meme.setPath(Uri.parse(url));
                             notifyItemChanged(getAdapterPosition());
@@ -164,6 +171,21 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                         }
                     });
                     return true;
+                }
+                public void callBroadCast() {
+                    if (Build.VERSION.SDK_INT >= 14) {
+                        MediaScannerConnection.scanFile(context, new String[]{Environment.getExternalStorageDirectory().toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                            /*
+                             *   (non-Javadoc)
+                             * @see android.media.MediaScannerConnection.OnScanCompletedListener#onScanCompleted(java.lang.String, android.net.Uri)
+                             */
+                            public void onScanCompleted(String path, Uri uri) {
+                            }
+                        });
+                    } else {
+                        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                                Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+                    }
                 }
             });
         }
