@@ -100,8 +100,8 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     Button revert = dialog.findViewById(R.id.revert);
                     revert.setEnabled(memes.get(getAdapterPosition()).Edited());
 
-                    //Nmp kako drugacije
-                    //img.setCropRect(edit_react);
+                    Rect edit_rect = null;
+                    img.setCropRect(memes.get(getAdapterPosition()).getRect());
                     //Toast.makeText(context,String.valueOf(edit_react),Toast.LENGTH_SHORT).show();
 
                     img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
@@ -116,6 +116,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                         public void onCropOverlayReleased(Rect rect) {
                             if(rect.top==img.getWholeImageRect().top && rect.right == img.getWholeImageRect().right && rect.bottom == img.getWholeImageRect().bottom && rect.left==img.getWholeImageRect().left)
                                 save.setEnabled(false);
+                            memes.get(getAdapterPosition()).setRect(rect);
                         }
                     });
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
@@ -155,6 +156,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            memes.get(getAdapterPosition()).setRect();
                             memes.get(getAdapterPosition()).orgPath();
                             notifyItemChanged(getAdapterPosition());
                         }

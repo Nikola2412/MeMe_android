@@ -1,5 +1,6 @@
 package com.example.meme;
 
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 public class UploadMeme implements Parcelable {
     public Uri Path;
     public Uri org;//null
+    public Rect rect;
 
     public void setPath(Uri path) {
         Path = path;
@@ -30,7 +32,20 @@ public class UploadMeme implements Parcelable {
     public UploadMeme(Uri path) {
         Path = path;
         org = path;
+        setRect();
     }
+
+    public Rect getRect() {
+        return rect;
+    }
+
+    public void setRect(Rect rect) {
+        this.rect = rect;
+    }
+    public void setRect() {
+        this.rect = new Rect(0,0,10000,10000);
+    }
+
     public boolean Edited(){
         return org != Path;
     }

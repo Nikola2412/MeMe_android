@@ -90,10 +90,6 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    Toast.makeText(getContext(),String.valueOf(dy),Toast.LENGTH_LONG).show();
-                    if(!recyclerView.canScrollVertically(-1) && dy<-20){
-                        Toast.makeText(getContext(),"Refresh",Toast.LENGTH_LONG).show();
-                    }
                     if (dy > 0) {
                         scroll_down = true;
                     } else if (dy < 0) {
