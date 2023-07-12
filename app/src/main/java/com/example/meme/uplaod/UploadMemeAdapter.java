@@ -19,6 +19,7 @@ import com.example.meme.R;
 import com.example.meme.UploadMeme;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.MyViewHolder> {
@@ -87,6 +88,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
             meme.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    UploadMeme meme = memes.get(getAdapterPosition());
                     Dialog dialog = new Dialog(context,R.style.Dialog);
                     dialog.setContentView(R.layout.delete_dialog);
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -94,14 +96,14 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                     Toast.makeText(context,"Editing has bugs so i am working on it",Toast.LENGTH_SHORT).show();
                     CropImageView img  = dialog.findViewById(R.id.preview_meme);
                     //img.setImageDrawable(meme.getDrawable());
-                    img.setImageUriAsync(memes.get(getAdapterPosition()).getOrg());
+                    img.setImageUriAsync(meme.getOrg());
                     img.onSaveInstanceState();
                     Button save = dialog.findViewById(R.id.save_meme);
                     Button revert = dialog.findViewById(R.id.revert);
-                    revert.setEnabled(memes.get(getAdapterPosition()).Edited());
+                    revert.setEnabled(meme.Edited());
 
                     Rect edit_rect = null;
-                    img.setCropRect(memes.get(getAdapterPosition()).getRect());
+                    img.setCropRect(meme.getRect());
                     //Toast.makeText(context,String.valueOf(edit_react),Toast.LENGTH_SHORT).show();
 
                     img.setOnSetCropOverlayMovedListener(new CropImageView.OnSetCropOverlayMovedListener() {
@@ -116,7 +118,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                         public void onCropOverlayReleased(Rect rect) {
                             if(rect.top==img.getWholeImageRect().top && rect.right == img.getWholeImageRect().right && rect.bottom == img.getWholeImageRect().bottom && rect.left==img.getWholeImageRect().left)
                                 save.setEnabled(false);
-                            memes.get(getAdapterPosition()).setRect(rect);
+                            meme.setRect(rect);
                         }
                     });
                     dialog.findViewById(R.id.delete_meme).setOnClickListener(new View.OnClickListener() {
@@ -143,7 +145,7 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                                 e.printStackTrace();
                             }
                             String url = MediaStore.Images.Media.insertImage(context.getContentResolver(), img.getCroppedImage(), "Edited", "");
-                            memes.get(getAdapterPosition()).setPath(Uri.parse(url));
+                            meme.setPath(Uri.parse(url));
                             notifyItemChanged(getAdapterPosition());
                         }
                     });
@@ -156,8 +158,8 @@ public class UploadMemeAdapter extends RecyclerView.Adapter<UploadMemeAdapter.My
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            memes.get(getAdapterPosition()).setRect();
-                            memes.get(getAdapterPosition()).orgPath();
+                            meme.setRect();
+                            meme.orgPath();
                             notifyItemChanged(getAdapterPosition());
                         }
                     });
