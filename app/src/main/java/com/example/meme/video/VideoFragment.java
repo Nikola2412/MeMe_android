@@ -90,6 +90,10 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
+                    Toast.makeText(getContext(),String.valueOf(dy),Toast.LENGTH_LONG).show();
+                    if(!recyclerView.canScrollVertically(-1) && dy<-20){
+                        Toast.makeText(getContext(),"Refresh",Toast.LENGTH_LONG).show();
+                    }
                     if (dy > 0) {
                         scroll_down = true;
                     } else if (dy < 0) {
@@ -136,9 +140,9 @@ public class VideoFragment extends Fragment implements RecycleViewInterface{
                     videos.add(video);
                     md.notifyItemInserted(videos.size() - 1);
                 }
-                md.notifyDataSetChanged();
                 recyclerViewState = new VideosRecyclerViewState(videos);
-                //Toast.makeText(getContext(),String.valueOf(videos.size()),Toast.LENGTH_SHORT).show();
+                md.notifyDataSetChanged();
+                //Toast.makeText(getContext(),String.valueOf(recyclerViewState.getVideos().size()),Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
